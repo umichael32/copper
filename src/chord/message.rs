@@ -1,6 +1,13 @@
 use std::fmt::{Display, Formatter, Result};
 use crate::chord::address::Address;
-use serde_json::json;
+use serde_json::{json, Value};
+
+macro_rules! json_builder {
+    ($cmd:expr; $arg:expr) => {
+        json!({"cmd" : $cmd , "arg" : $arg })
+    };
+}
+
 
 pub enum Message {
     Ack(u32),
@@ -19,11 +26,20 @@ pub enum Message {
 }
 
 impl Message {
-    pub fn to_json(&self) -> String {
-        let j = match self {
-            Message::Hello(addr) => json!({ "idNode" : addr.get_id(), "IP" : addr.get_ip(), "port" : addr.get_port(),}),
+    pub fn to_json(&self) -> Value {
+        match self {
+            Message::Ack(id) =>
+                json_builder!("ack"; json!({ "id" : id})),
+            Message::Answer(key, value, exists) =>
+                json_builder!("answer"; json!({ "key" : key, "value" : value, "val_exists" : exists})),
+            Message::AnswerResp(key, addr) =>
+                json_builder!("answerresp"; json!({ "key" : key, "address" : addr.to_json()})),
+            Message::Exit() =>
+                json_builder!("exit"; {}),
+            Message::Hello(addr) =>
+                json_builder!("hello"; json!({ "address" : addr.to_json()})),
+
             _ => { json!({}) }
-        };
-        j.to_string()
+        }
     }
 }

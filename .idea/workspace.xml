@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated />
   </component>
@@ -13,13 +31,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/chord/address.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chord/connection.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chord/message.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chord/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chord/table.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chord/address.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/address.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chord/connection.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chord/message.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/message.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chord/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,14 +78,9 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Run rustochord" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run --package rustochord --bin rustochord" />
@@ -79,6 +91,11 @@
       <envs />
       <method v="2">
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
@@ -101,36 +118,58 @@
       <updated>1601451238455</updated>
       <workItem from="1601451239764" duration="2215000" />
       <workItem from="1601639057457" duration="7301000" />
+      <workItem from="1601920308657" duration="6739000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="WindowStateProjectService">
-    <state x="768" y="272" width="374" height="569" key="#com.intellij.ide.util.MemberChooser" timestamp="1601643337268">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state x="1024" y="356" width="374" height="569" key="#com.intellij.ide.util.MemberChooser" timestamp="1601921665382">
+      <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="768" y="272" width="374" height="569" key="#com.intellij.ide.util.MemberChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1601643337268" />
-    <state width="1878" height="330" key="GridCell.Tab.0.bottom" timestamp="1601646360693">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state x="1024" y="356" key="#com.intellij.ide.util.MemberChooser/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601921665382" />
+    <state x="1013" y="483" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601924583052">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state x="1013" y="483" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601924583052" />
+    <state width="2518" height="395" key="GridCell.Tab.0.bottom" timestamp="1601927014609">
+      <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="1878" height="330" key="GridCell.Tab.0.center" timestamp="1601646360693">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="2518" height="395" key="GridCell.Tab.0.bottom/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601927014609" />
+    <state width="2518" height="395" key="GridCell.Tab.0.center" timestamp="1601927014609">
+      <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="1878" height="330" key="GridCell.Tab.0.left" timestamp="1601646360693">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="2518" height="395" key="GridCell.Tab.0.center/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601927014609" />
+    <state width="2518" height="395" key="GridCell.Tab.0.left" timestamp="1601927014609">
+      <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="1878" height="330" key="GridCell.Tab.0.right" timestamp="1601646360693">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="2518" height="395" key="GridCell.Tab.0.left/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601927014609" />
+    <state width="2518" height="395" key="GridCell.Tab.0.right" timestamp="1601927014609">
+      <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state x="464" y="188" width="992" height="737" key="SettingsEditor" timestamp="1601639442613">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="2518" height="395" key="GridCell.Tab.0.right/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601927014609" />
+    <state x="619" y="243" width="992" height="737" key="SettingsEditor" timestamp="1601924758812">
+      <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="464" y="188" width="992" height="737" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1601639442613" />
+    <state x="619" y="243" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601924758812" />
   </component>
 </project>
