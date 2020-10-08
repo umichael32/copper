@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use crate::chord::address::Address;
+use std::collections::HashMap;
 
 pub struct Table {
     association: HashMap<u32, Address>,
@@ -7,6 +7,8 @@ pub struct Table {
 
 impl Table {
     pub fn new() -> Table {
-        return Table { association: HashMap::new() };
+        return Table {
+            association: HashMap::new(),
+        };
     }
 }

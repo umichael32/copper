@@ -31,10 +31,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/chord/node.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chord/address.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/address.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chord/message.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/message.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chord/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chord/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/node.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chord/table.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/table.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
@@ -77,7 +78,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.language" />
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
@@ -135,7 +136,9 @@
     </recent_temporary>
   </component>
   <component name="RustProjectSettings">
+    <option name="runRustfmtOnSave" value="true" />
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+    <option name="useRustfmt" value="true" />
     <option name="version" value="2" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -151,7 +154,7 @@
       <workItem from="1601920308657" duration="6773000" />
       <workItem from="1602184140144" duration="243000" />
       <workItem from="1602184480195" duration="186000" />
-      <workItem from="1602184671496" duration="3770000" />
+      <workItem from="1602184671496" duration="4019000" />
     </task>
     <servers />
   </component>
@@ -180,31 +183,31 @@
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="1013" y="483" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601924583052" />
-    <state width="2518" height="497" key="GridCell.Tab.0.bottom" timestamp="1602188389413">
+    <state width="2518" height="497" key="GridCell.Tab.0.bottom" timestamp="1602188468958">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="2518" height="497" key="GridCell.Tab.0.bottom/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188389413" />
-    <state width="2518" height="497" key="GridCell.Tab.0.center" timestamp="1602188389413">
+    <state width="2518" height="497" key="GridCell.Tab.0.bottom/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188468958" />
+    <state width="2518" height="497" key="GridCell.Tab.0.center" timestamp="1602188468958">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="2518" height="497" key="GridCell.Tab.0.center/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188389413" />
-    <state width="2518" height="497" key="GridCell.Tab.0.left" timestamp="1602188389413">
+    <state width="2518" height="497" key="GridCell.Tab.0.center/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188468958" />
+    <state width="2518" height="497" key="GridCell.Tab.0.left" timestamp="1602188468958">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="2518" height="497" key="GridCell.Tab.0.left/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188389413" />
-    <state width="2518" height="497" key="GridCell.Tab.0.right" timestamp="1602188389413">
+    <state width="2518" height="497" key="GridCell.Tab.0.left/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188468958" />
+    <state width="2518" height="497" key="GridCell.Tab.0.right" timestamp="1602188468958">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="2518" height="497" key="GridCell.Tab.0.right/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188389413" />
-    <state x="619" y="243" width="992" height="737" key="SettingsEditor" timestamp="1601924758812">
+    <state width="2518" height="497" key="GridCell.Tab.0.right/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188468958" />
+    <state x="619" y="243" width="992" height="737" key="SettingsEditor" timestamp="1602188661941">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="464" y="188" width="992" height="737" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1601639442613" />
-    <state x="619" y="243" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601924758812" />
+    <state x="619" y="243" width="992" height="737" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188661941" />
     <state x="944" y="342" width="672" height="677" key="run.anything.popup" timestamp="1602184720772">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>

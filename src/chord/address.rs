@@ -1,6 +1,6 @@
-use std::net::{Ipv4Addr, TcpStream};
-use std::io::prelude::*;
 use serde_json::{json, Value};
+use std::io::prelude::*;
+use std::net::{Ipv4Addr, TcpStream};
 
 use crate::chord::message::Message;
 
@@ -9,7 +9,6 @@ pub struct Address {
     port: u32,
     id: u32,
 }
-
 
 impl Address {
     pub fn new(ip: Ipv4Addr, port: u32, id: u32) -> Address {
@@ -36,7 +35,7 @@ impl Address {
         let str_mess: String = mess.to_json().to_string();
         match self.connect() {
             Some(mut s) => s.write(str_mess.as_bytes()).ok(),
-            _ => None
+            _ => None,
         }
     }
 
