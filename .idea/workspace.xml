@@ -30,8 +30,13 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="">
+    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="update">
+      <change afterPath="$PROJECT_DIR$/src/app/error.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/parameter.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rust.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +77,13 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
+    <property name="org.rust.disableDetachedFileInspection/home/michael/Documents/Cours/Master/Semestre_3/SD/copper/src/app/error.rs" value="true" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
@@ -80,6 +91,18 @@
     </option>
   </component>
   <component name="RunManager" selected="Cargo.Run rustochord">
+    <configuration name="Expand rustochord" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="channel" value="DEFAULT" />
+      <option name="command" value="expand --bin rustochord --color=always --theme=GitHub --tests" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <envs />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Run rustochord" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
       <option name="channel" value="DEFAULT" />
       <option name="command" value="run --package rustochord --bin rustochord" />
@@ -116,14 +139,10 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Cargo.Run rustochord" />
+        <item itemvalue="Cargo.Expand rustochord" />
         <item itemvalue="Cargo.check" />
         <item itemvalue="Cargo.cl" />
       </list>
@@ -148,8 +167,20 @@
       <workItem from="1601920308657" duration="6773000" />
       <workItem from="1602184140144" duration="243000" />
       <workItem from="1602184480195" duration="186000" />
-      <workItem from="1602184671496" duration="4755000" />
+      <workItem from="1602184671496" duration="5323000" />
+      <workItem from="1602431805160" duration="51000" />
+      <workItem from="1602431871145" duration="29000" />
+      <workItem from="1602433428638" duration="3028000" />
+      <workItem from="1602439260314" duration="320000" />
     </task>
+    <task id="LOCAL-00001" summary="update">
+      <created>1602194397642</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1602194397642</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,41 +198,49 @@
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="1024" y="356" width="374" height="569" key="#com.intellij.ide.util.MemberChooser" timestamp="1601921665382">
+    <state x="1024" y="356" width="374" height="569" key="#com.intellij.ide.util.MemberChooser" timestamp="1602434077010">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="768" y="272" width="374" height="569" key="#com.intellij.ide.util.MemberChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1601643337268" />
-    <state x="1024" y="356" key="#com.intellij.ide.util.MemberChooser/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601921665382" />
+    <state x="1024" y="356" width="374" height="569" key="#com.intellij.ide.util.MemberChooser/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602434077010" />
     <state x="1013" y="483" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601924583052">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="1013" y="483" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601924583052" />
-    <state width="2518" height="497" key="GridCell.Tab.0.bottom" timestamp="1602188468958">
+    <state width="1259" height="497" key="GridCell.Tab.0.bottom" timestamp="1602436456078">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="2518" height="497" key="GridCell.Tab.0.bottom/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188468958" />
-    <state width="2518" height="497" key="GridCell.Tab.0.center" timestamp="1602188468958">
+    <state width="1259" height="497" key="GridCell.Tab.0.bottom/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602436456078" />
+    <state width="1259" height="497" key="GridCell.Tab.0.center" timestamp="1602436456078">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="2518" height="497" key="GridCell.Tab.0.center/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188468958" />
-    <state width="2518" height="497" key="GridCell.Tab.0.left" timestamp="1602188468958">
+    <state width="1259" height="497" key="GridCell.Tab.0.center/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602436456078" />
+    <state width="1259" height="497" key="GridCell.Tab.0.left" timestamp="1602436456078">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="2518" height="497" key="GridCell.Tab.0.left/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188468958" />
-    <state width="2518" height="497" key="GridCell.Tab.0.right" timestamp="1602188468958">
+    <state width="1259" height="497" key="GridCell.Tab.0.left/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602436456078" />
+    <state width="1259" height="497" key="GridCell.Tab.0.right" timestamp="1602436456078">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="2518" height="497" key="GridCell.Tab.0.right/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188468958" />
-    <state x="619" y="243" width="992" height="737" key="SettingsEditor" timestamp="1602188810789">
+    <state width="1259" height="497" key="GridCell.Tab.0.right/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602436456078" />
+    <state x="619" y="243" width="992" height="737" key="SettingsEditor" timestamp="1602434407964">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="464" y="188" width="992" height="737" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1601639442613" />
-    <state x="619" y="243" width="992" height="737" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602188810789" />
+    <state x="619" y="243" width="992" height="737" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602434407964" />
+    <state x="875" y="469" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1602194409188">
+      <screen x="0" y="27" width="2560" height="1413" />
+    </state>
+    <state x="875" y="469" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602194409188" />
     <state x="1084" y="649" width="382" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1602194358161">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
