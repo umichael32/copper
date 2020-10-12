@@ -4,10 +4,13 @@ use std::{env::args, net::Ipv4Addr};
 
 pub fn get_args() -> Result<Value, ParamError> {
     match args().len() {
-        2 => match (args().nth(1).unwrap()).parse::<u32>() {
-            Ok(p) => Ok(json!({"type" : 1 , "arg" : { "port": p }})),
-            Err(_e) => Err(ParamError::new(String::from(
-                "port should be a number ( err : {} )",
+        3 => match (
+            (args().nth(1).unwrap()).parse::<Ipv4Addr>(),
+            (args().nth(2).unwrap()).parse::<u32>(),
+        ) {
+            (Ok(ip), Ok(port)) => Ok(json!({"type" : 1 , "arg" : { "ip" : ip ,"port": port }})),
+            _ => Err(ParamError::new(String::from(
+                "use should be : copper <ip> <port>",
             ))),
         },
         5 => {

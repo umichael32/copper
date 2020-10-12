@@ -1,6 +1,7 @@
 use crate::chord::address::Address;
 use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct Table {
     association: HashMap<u32, Address>,
 }

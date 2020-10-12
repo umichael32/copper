@@ -4,6 +4,7 @@ use std::net::{Ipv4Addr, TcpStream};
 
 use crate::chord::message::Message;
 
+#[derive(Debug)]
 pub struct Address {
     ip: Ipv4Addr,
     port: u32,
