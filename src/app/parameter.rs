@@ -1,8 +1,6 @@
-use serde_json::{json, Value};
-use std::env::args;
-
 use crate::app::error::ParamError;
-use std::net::Ipv4Addr;
+use serde_json::{json, Value};
+use std::{env::args, net::Ipv4Addr};
 
 pub fn get_args() -> Result<Value, ParamError> {
     match args().len() {
@@ -12,22 +10,25 @@ pub fn get_args() -> Result<Value, ParamError> {
                 "port should be a number ( err : {} )",
             ))),
         },
-        4 => {
-            let info: (u32, Ipv4Addr, u32) =
+        5 => {
+            let info: (Ipv4Addr, u32, Ipv4Addr, u32) =
                 match (
-                    (args().nth(1).unwrap()).parse::<u32>(),
-                    (args().nth(2).unwrap()).parse::<Ipv4Addr>(),
-                    (args().nth(3).unwrap()).parse::<u32>(),
+                    (args().nth(1).unwrap()).parse::<Ipv4Addr>(),
+                    (args().nth(2).unwrap()).parse::<u32>(),
+                    (args().nth(3).unwrap()).parse::<Ipv4Addr>(),
+                    (args().nth(4).unwrap()).parse::<u32>(),
                 ) {
-                    (Ok(a), Ok(ip), Ok(b)) => (a, ip, b),
+                    (Ok(ip_l), Ok(port_l), Ok(ip_d), Ok(port_d)) => (ip_l, port_l, ip_d, port_d),
                     _ => return Err(ParamError::new(String::from(
-                        "port_1 and port_2 should be digits and ip should have this format x.x.x.x",
+                        "port_l and port_d should be digits and ip_l and ip_d should have this format x.x.x.x",
                     ))),
                 };
-            Ok(json!({ "type" : 2 ,"arg" : { "port_1": info.0 ,"ip" : info.1  ,"port_2" : info.2}}))
+            Ok(
+                json!({ "type" : 2 ,"arg" : { "ip_l" : info.0,"port_l": info.1 ,"ip_d" : info.2  ,"port_d" : info.3}}),
+            )
         }
         _ => Err(ParamError::new(String::from(
-            "usage : main <port> or main <port_1> <ip> <port_2> ",
+            "usage : main <port> or main <ip_l> <port_l> <ip_d> <port_d> ",
         ))),
     }
 }

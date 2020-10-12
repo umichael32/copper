@@ -31,12 +31,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="update">
-      <change afterPath="$PROJECT_DIR$/src/app/error.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/parameter.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compilerexplorer.settings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rust.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/parameter.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/parameter.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chord/message.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/message.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +64,9 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -78,7 +79,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="org.rust.disableDetachedFileInspection/home/michael/Documents/Cours/Master/Semestre_3/SD/copper/src/app/error.rs" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -171,7 +172,11 @@
       <workItem from="1602431805160" duration="51000" />
       <workItem from="1602431871145" duration="29000" />
       <workItem from="1602433428638" duration="3028000" />
-      <workItem from="1602439260314" duration="320000" />
+      <workItem from="1602439260314" duration="1455000" />
+      <workItem from="1602447600847" duration="218000" />
+      <workItem from="1602482220147" duration="1711000" />
+      <workItem from="1602483939012" duration="440000" />
+      <workItem from="1602510432061" duration="281000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1602194397642</created>
@@ -212,35 +217,35 @@
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="1013" y="483" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601924583052" />
-    <state width="1259" height="497" key="GridCell.Tab.0.bottom" timestamp="1602436456078">
+    <state width="2518" height="497" key="GridCell.Tab.0.bottom" timestamp="1602510663390">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="1259" height="497" key="GridCell.Tab.0.bottom/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602436456078" />
-    <state width="1259" height="497" key="GridCell.Tab.0.center" timestamp="1602436456078">
+    <state width="2518" height="497" key="GridCell.Tab.0.bottom/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602510663390" />
+    <state width="2518" height="497" key="GridCell.Tab.0.center" timestamp="1602510663390">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="1259" height="497" key="GridCell.Tab.0.center/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602436456078" />
-    <state width="1259" height="497" key="GridCell.Tab.0.left" timestamp="1602436456078">
+    <state width="2518" height="497" key="GridCell.Tab.0.center/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602510663390" />
+    <state width="2518" height="497" key="GridCell.Tab.0.left" timestamp="1602510663389">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="1259" height="497" key="GridCell.Tab.0.left/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602436456078" />
-    <state width="1259" height="497" key="GridCell.Tab.0.right" timestamp="1602436456078">
+    <state width="2518" height="497" key="GridCell.Tab.0.left/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602510663389" />
+    <state width="2518" height="497" key="GridCell.Tab.0.right" timestamp="1602510663390">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state width="1878" height="330" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1601646360693" />
-    <state width="1259" height="497" key="GridCell.Tab.0.right/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602436456078" />
-    <state x="619" y="243" width="992" height="737" key="SettingsEditor" timestamp="1602434407964">
+    <state width="2518" height="497" key="GridCell.Tab.0.right/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602510663390" />
+    <state x="1229" y="374" width="992" height="737" key="SettingsEditor" timestamp="1602483930200">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="464" y="188" width="992" height="737" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1601639442613" />
-    <state x="619" y="243" width="992" height="737" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602434407964" />
-    <state x="875" y="469" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1602194409188">
+    <state x="1229" y="374" width="992" height="737" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602483930200" />
+    <state x="875" y="469" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1602439656778">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
-    <state x="875" y="469" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602194409188" />
+    <state x="875" y="469" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602439656778" />
     <state x="1084" y="649" width="382" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1602194358161">
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
