@@ -37,18 +37,36 @@ impl Node {
                 Ok(s) => s,
             };
         for stream in sock.incoming() {
-            println!("message incoming");
             let stream = match stream {
                 Ok(s) => s,
                 _ => return Err(NodeError::new(format!("message reception failed"))),
             };
-            self.handle_message(stream);
+            if let Ok(end) = self.handle_message(stream) {
+                if end {
+                    break;
+                }
+            }
         }
         Ok(())
     }
 
-    fn handle_message(&self, mut stream: TcpStream) {
-        let mut buffer = [0; 128];
-        stream.read(&mut buffer).unwrap();
+    fn handle_message(&self, mut stream: TcpStream) -> Result<bool, NodeError> {
+        let mut buffer: [u8; 128] = [0; 128];
+        let u = match stream.read(&mut buffer) {
+            Ok(s) => s,
+            Err(_) => return Err(NodeError::new(format!("message read no performed"))),
+        };
+        let v: Value = match serde_json::from_slice(&buffer[0..u]) {
+            Ok(v) => v,
+            Err(_) => return Err(NodeError::new(format!("wrong json format "))),
+        };
+        let s: &str = match v["cmd"].as_str() {
+            Some(s) => s,
+            None => return Err(NodeError::new(format!("something bad append"))),
+        };
+        match s {
+            "exit" => Ok(true),
+            _ => Ok(false),
+        }
     }
 }
