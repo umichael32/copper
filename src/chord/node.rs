@@ -27,7 +27,9 @@ impl Node {
     }
 
     pub fn listen(&mut self) -> Result<(), NodeError> {
-        return if let Ok(sock) = TcpListener::bind(format!("{}:{}", self.addr.get_ip(), self.addr.get_port())) {
+        return if let Ok(sock) =
+            TcpListener::bind(format!("{}:{}", self.addr.get_ip(), self.addr.get_port()))
+        {
             for stream in sock.incoming() {
                 let stream: TcpStream = match stream {
                     Ok(s) => s,
@@ -41,8 +43,12 @@ impl Node {
             }
             Ok(())
         } else {
-            Err(NodeError::new(format!(¶"Connection ip : {} on port : {} is not allowed",self.addr.get_ip(),self.addr.get_port())))
-        }
+            Err(NodeError::new(format!(
+                "Connection ip : {} on port : {} is not allowed",
+                self.addr.get_ip(),
+                self.addr.get_port()
+            )))
+        };
     }
 
     fn read_parse(mut stream: TcpStream) -> Option<Value> {
@@ -108,7 +114,7 @@ impl Node {
         false
     }
     fn handle_answer_resp(&self, v: Value) -> bool {
-        let args: Value = v["args"].to_owned();
+        let _args: Value = v["args"].to_owned();
         false
     }
 }
