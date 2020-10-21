@@ -49,7 +49,7 @@ impl Message {
                 json_builder!("get_resp", json!({"address" : addr.to_json(), "key" : key}))
             }
             Message::GetStat(addr, get, put, gestion) => json_builder!(
-                "getstat",
+                "get_stat",
                 json!({"address" : addr.to_json(), "get" : get, "put" : put, "gestion" : gestion  })
             ),
             Message::HelloKO(id) => json_builder!("hello_ko", json!({ "id": id })),

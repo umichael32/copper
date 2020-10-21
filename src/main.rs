@@ -20,7 +20,7 @@ fn main() {
             let ip = args["arg"]["ip"].as_str();
             let ip = ip.unwrap().parse::<Ipv4Addr>();
             let port = args["arg"]["port"].as_i64().unwrap() as u32;
-            let n = Node::new(ip.unwrap(), port);
+            let mut n = Node::new(ip.unwrap(), port);
 
             if let Err(e) = n.listen() {
                 println!("{}", e);
