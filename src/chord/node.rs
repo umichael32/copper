@@ -63,7 +63,7 @@ impl Node {
         }
     }
 
-    fn handle_message(&mut self, mut stream: TcpStream) -> Result<bool, NodeError> {
+    fn handle_message(&mut self, stream: TcpStream) -> Result<bool, NodeError> {
         if let Some(v) = Node::read_parse(stream) {
             let s: &str = match v["cmd"].as_str() {
                 Some(s) => s,
