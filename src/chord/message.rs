@@ -1,6 +1,5 @@
 use crate::chord::address::Address;
 use serde_json::{json, Value};
-use std::fmt::{Display, Formatter, Result};
 
 macro_rules! json_builder {
     ($cmd:expr, $arg:expr) => {

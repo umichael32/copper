@@ -3,8 +3,7 @@ mod chord;
 
 use crate::chord::node::Node;
 use app::parameter;
-use serde_json::{json, Value};
-use std::net::{IpAddr, Ipv4Addr};
+use std::net::{ Ipv4Addr};
 use std::process::exit;
 
 fn main() {
