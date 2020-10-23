@@ -2,6 +2,7 @@ use crate::chord::address::Address;
 use crate::chord::error::NodeError;
 use crate::chord::table::Table;
 use serde_json::Value;
+use std::borrow::Borrow;
 use std::collections::HashMap;
 use std::io::Read;
 use std::net::{Ipv4Addr, TcpListener, TcpStream};
@@ -9,9 +10,9 @@ use std::net::{Ipv4Addr, TcpListener, TcpStream};
 #[derive(Debug)]
 pub struct Node {
     table: Table,
-    data: HashMap<u32, f64>,
+    data: HashMap<u64, f64>,
     addr: Address,
-    ack_vector: Box<Vec<u32>>,
+    ack_vector: Box<Vec<u64>>,
 }
 
 impl Node {
@@ -84,34 +85,78 @@ impl Node {
     fn handle_ack(&mut self, v: Value) -> bool {
         let args: Value = v["args"].to_owned();
         if let Some(id) = args["id"].as_u64() {
-            match self.ack_vector.iter().position(|x| *x == (id as u32)) {
+            match self.ack_vector.iter().position(|x| *x == id) {
                 Some(index) => {
                     println!("ack {} accepted", id);
                     self.ack_vector.remove(index);
                 }
-                None => println!("I don't have this ack"),
+                None => {}
             }
         }
         return false;
     }
     fn handle_answer(&self, v: Value) -> bool {
-        let args: Value = v["args"].to_owned();
-        let key: u32 = args["key"].as_u64().unwrap() as u32;
-        if let Some(exists) = args["value_exists"].as_bool() {
-            if exists {
-                match args["value"].as_f64() {
-                    Some(requested_value) => {
-                        println!("the value of key {} is {}", key, requested_value)
-                    }
-                    None => println!("the value is not f64 able"),
-                };
-            } else {
-                println!("the value don't exist\n");
+        let args: &Value = v["args"].borrow();
+        if let Some(key) = args["key"].as_u64() {
+            if let Some(exists) = args["value_exists"].as_bool() {
+                if exists {
+                    match args["value"].as_f64() {
+                        Some(requested_value) => {
+                            println!("the value of key {} is {}", key, requested_value)
+                        }
+                        None => {}
+                    };
+                }
             }
         }
         false
     }
     fn handle_answer_resp(&self, v: Value) -> bool {
+        let _args: Value = v["args"].to_owned();
+        false
+    }
+
+    fn handle_hello(&self, v: Value) -> bool {
+        let _args: Value = v["args"].to_owned();
+        false
+    }
+
+    fn handle_put(&self, v: Value) -> bool {
+        let _args: Value = v["args"].to_owned();
+        false
+    }
+
+    fn handle_get(&self, v: Value) -> bool {
+        let _args: Value = v["args"].to_owned();
+        false
+    }
+
+    fn handle_get_resp(&self, v: Value) -> bool {
+        let _args: Value = v["args"].to_owned();
+        false
+    }
+
+    fn handle_get_stat(&self, v: Value) -> bool {
+        let _args: Value = v["args"].to_owned();
+        false
+    }
+
+    fn handle_hello_ok(&self, v: Value) -> bool {
+        let _args: Value = v["args"].to_owned();
+        false
+    }
+
+    fn handle_hello_ko(&self, v: Value) -> bool {
+        let _args: Value = v["args"].to_owned();
+        false
+    }
+
+    fn handle_print(&self, v: Value) -> bool {
+        let _args: Value = v["args"].to_owned();
+        false
+    }
+
+    fn handle_update_table(&self, v: Value) -> bool {
         let _args: Value = v["args"].to_owned();
         false
     }
