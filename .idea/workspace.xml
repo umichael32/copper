@@ -30,9 +30,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_10_2020_10_10__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_10_2020_10_10__Default_Changelist_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/chord/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/node.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -82,7 +80,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
     <property name="org.rust.disableDetachedFileInspection/home/michael/Documents/Cours/Master/Semestre_3/SD/copper/src/app/error.rs" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -194,7 +192,7 @@
       <workItem from="1603354151639" duration="480000" />
       <workItem from="1603354649987" duration="143000" />
       <workItem from="1603453247220" duration="479000" />
-      <workItem from="1603453743723" duration="3996000" />
+      <workItem from="1603453743723" duration="4354000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1602194397642</created>
@@ -203,7 +201,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602194397642</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="update">
+      <created>1603458417200</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1603458417200</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,6 +250,10 @@
     </state>
     <state x="760" y="336" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603454805563" />
     <state x="1013" y="483" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601924583052" />
+    <state x="501" y="89" key="CommitChangelistDialog2" timestamp="1603458415528">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="501" y="89" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1603458415528" />
     <state x="1508" y="469" width="424" height="491" key="FileChooserDialogImpl" timestamp="1603266387043">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -314,17 +323,18 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="248" y="122" key="MergeDialog/0.0.2560.1400/2560.0.1080.1920@0.0.2560.1400" timestamp="1603354278968" />
-    <state x="922" y="256" width="916" height="738" key="SettingsEditor" timestamp="1603453772199">
+    <state x="922" y="256" width="916" height="738" key="SettingsEditor" timestamp="1603458388643">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="922" y="256" width="916" height="738" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1603453772199" />
+    <state x="922" y="256" width="916" height="738" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1603458388643" />
     <state x="1229" y="344" width="916" height="993" key="SettingsEditor/0.0.2560.1400/2560.0.1080.1920@0.0.2560.1400" timestamp="1603354762132" />
     <state x="464" y="188" width="992" height="737" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1601639442613" />
     <state x="1229" y="374" width="992" height="737" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602699186915" />
     <state x="2730" y="472" width="910" height="1002" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@2560.0.1080.1920" timestamp="1602572593971" />
-    <state x="875" y="438" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1603266879682">
-      <screen x="0" y="0" width="2560" height="1400" />
+    <state x="656" y="325" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1603458460785">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
+    <state x="656" y="325" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1603458460785" />
     <state x="875" y="438" key="Vcs.Push.Dialog.v2/0.0.2560.1400/2560.0.1080.1920@0.0.2560.1400" timestamp="1603266879682" />
     <state x="875" y="469" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602569594441" />
     <state x="739" y="364" key="cloudConfig.PluginsDialog" timestamp="1603453717793">

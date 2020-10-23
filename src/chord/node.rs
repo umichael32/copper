@@ -96,7 +96,7 @@ impl Node {
         return false;
     }
     fn handle_answer(&self, v: Value) -> bool {
-        let args: &Value = v["args"].borrow();
+        let args: Value = v["args"].to_owned();
         if let Some(key) = args["key"].as_u64() {
             if let Some(exists) = args["value_exists"].as_bool() {
                 if exists {
