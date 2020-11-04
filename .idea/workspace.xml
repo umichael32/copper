@@ -30,10 +30,8 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="update">
+    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="ignore .idea directory">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_10_2020_10_10_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_22_10_2020_10_10__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -149,6 +147,11 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Cargo.Expand rustochord" />
       <item itemvalue="Cargo.Run copper" />
@@ -208,6 +211,7 @@
       <workItem from="1603353316298" duration="88000" />
       <workItem from="1603354151639" duration="480000" />
       <workItem from="1603354649987" duration="143000" />
+      <workItem from="1604472215834" duration="453000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1602194397642</created>
@@ -216,7 +220,14 @@
       <option name="project" value="LOCAL" />
       <updated>1602194397642</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="ignore .idea directory">
+      <created>1604472298639</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1604472298639</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,7 +248,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="update" />
-    <option name="LAST_COMMIT_MESSAGE" value="update" />
+    <MESSAGE value="ignore .idea directory" />
+    <option name="LAST_COMMIT_MESSAGE" value="ignore .idea directory" />
   </component>
   <component name="WindowStateProjectService">
     <state x="598" y="464" width="1092" height="681" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1603354468582">
@@ -255,6 +267,10 @@
       <screen x="0" y="27" width="2560" height="1413" />
     </state>
     <state x="1013" y="483" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1601924583052" />
+    <state x="754" y="269" key="CommitChangelistDialog2" timestamp="1604472636620">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="754" y="269" key="CommitChangelistDialog2/0.0.2560.1400/2560.0.1920.1080@0.0.2560.1400" timestamp="1604472636620" />
     <state x="1508" y="469" width="424" height="491" key="FileChooserDialogImpl" timestamp="1603266387043">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -327,10 +343,11 @@
     <state x="464" y="188" width="992" height="737" key="SettingsEditor/0.27.1920.1053@0.27.1920.1053" timestamp="1601639442613" />
     <state x="1229" y="374" width="992" height="737" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602699186915" />
     <state x="2730" y="472" width="910" height="1002" key="SettingsEditor/0.27.2560.1413/2560.0.1080.1920@2560.0.1080.1920" timestamp="1602572593971" />
-    <state x="875" y="438" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1603266879682">
+    <state x="875" y="438" width="800" height="535" key="Vcs.Push.Dialog.v2" timestamp="1604472307626">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="875" y="438" key="Vcs.Push.Dialog.v2/0.0.2560.1400/2560.0.1080.1920@0.0.2560.1400" timestamp="1603266879682" />
+    <state x="875" y="438" key="Vcs.Push.Dialog.v2/0.0.2560.1400/2560.0.1920.1080@0.0.2560.1400" timestamp="1604472307626" />
     <state x="875" y="469" width="800" height="535" key="Vcs.Push.Dialog.v2/0.27.2560.1413/2560.0.1080.1920@0.27.2560.1413" timestamp="1602569594441" />
     <state x="1084" y="616" width="382" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603354292655">
       <screen x="0" y="0" width="2560" height="1400" />
