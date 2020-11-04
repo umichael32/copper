@@ -3,20 +3,21 @@ use std::io::prelude::*;
 use std::net::{Ipv4Addr, TcpStream};
 
 use crate::chord::message::Message;
+use std::fmt::Formatter;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Address {
     ip: Ipv4Addr,
-    port: u32,
-    id: u32,
+    port: u64,
+    id: u64,
 }
 
 impl Address {
-    pub fn new(ip: Ipv4Addr, port: u32, id: u32) -> Address {
+    pub fn new(ip: Ipv4Addr, port: u64, id: u64) -> Address {
         return Address { ip, port, id };
     }
 
-    pub fn get_id(&self) -> u32 {
+    pub fn get_id(&self) -> u64 {
         return self.id;
     }
 
@@ -24,7 +25,7 @@ impl Address {
         return self.ip;
     }
 
-    pub fn get_port(&self) -> u32 {
+    pub fn get_port(&self) -> u64 {
         return self.port;
     }
 

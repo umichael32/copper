@@ -1,9 +1,10 @@
 use crate::chord::address::Address;
 use crate::chord::error::NodeError;
+use crate::chord::message::Message;
 use crate::chord::table::Table;
-use serde_json::Value;
-use std::borrow::Borrow;
+use serde_json::{json, Value};
 use std::collections::HashMap;
+use std::fmt::Formatter;
 use std::io::Read;
 use std::net::{Ipv4Addr, TcpListener, TcpStream};
 
@@ -16,11 +17,12 @@ pub struct Node {
 }
 
 impl Node {
-    pub fn new(ip: Ipv4Addr, port: u32) -> Node {
+    pub fn new(ip: Ipv4Addr, port: u64) -> Node {
+        let addr = Address::new(ip, port, 1);
         return Node {
-            table: Table::new(),
+            table: Table::new(1, addr.clone()),
             data: HashMap::new(),
-            addr: Address::new(ip, port, 1),
+            addr,
             ack_vector: Box::new(Vec::new()),
         };
     }
@@ -69,10 +71,19 @@ impl Node {
                 None => return Err(NodeError::new(format!("something bad append"))),
             };
             let b = match s {
-                "exit" => true,
+                "exit" => self.handle_exit(v),
                 "ack" => self.handle_ack(v),
                 "answer" => self.handle_answer(v),
                 "answer_resp" => self.handle_answer_resp(v),
+                "stats" => self.handle_get_stat(v),
+                "print" => self.handle_print(v),
+                "get" => self.handle_get(v),
+                "get_resp" => self.handle_get_resp(v),
+                "put" => self.handle_put(v),
+                "hello" => self.handle_hello(v),
+                "hello_ok" => self.handle_hello_ok(v),
+                "hello_ko" => self.handle_hello_ko(v),
+                "update_table" => self.handle_update_table(v),
                 _ => false,
             };
             Ok(b)
@@ -81,6 +92,14 @@ impl Node {
                 "error while reading the incoming message ( read parse ) "
             )))
         }
+    }
+
+    fn handle_exit(&self, _v: Value) -> bool {
+        let previous = self.table.previous();
+        if self.addr.get_id() != previous.0 {
+            previous.1.send_message(Message::Exit());
+        }
+        return true;
     }
     fn handle_ack(&mut self, v: Value) -> bool {
         let args: Value = v["args"].to_owned();
