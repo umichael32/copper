@@ -1,12 +1,14 @@
 use crate::chord::address::Address;
 use crate::chord::error::NodeError;
 use crate::chord::message::Message;
+use crate::chord::message::Message::{Answer, Get, GetResp};
 use crate::chord::table::Table;
 use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::fmt::Formatter;
 use std::io::Read;
-use std::net::{Ipv4Addr, TcpListener, TcpStream};
+use std::net::{AddrParseError, Ipv4Addr, TcpListener, TcpStream};
+use std::ops::Add;
 
 #[derive(Debug)]
 pub struct Node {
@@ -36,6 +38,7 @@ impl Node {
                     Ok(s) => s,
                     _ => return Err(NodeError::new(format!("message reception failed"))),
                 };
+                println!("Handle Message ");
                 if let Ok(end) = self.handle_message(stream) {
                     if end {
                         break;
@@ -146,7 +149,29 @@ impl Node {
     }
 
     fn handle_get(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
+        let args: Value = v["args"].to_owned();
+        let addr: Value = args["address"].to_owned();
+        let ip: Result<Ipv4Addr, AddrParseError> = addr["host"].to_string().parse::<Ipv4Addr>();
+        let addr: Address = match (addr["id"].as_u64(), ip, addr["port"].as_u64()) {
+            (Some(id), Ok(ip), Some(port)) => Address::new(ip, port, id),
+            _ => return false,
+        };
+        let key = match args["key"].as_u64() {
+            Some(i) => i,
+            _ => return false,
+        };
+
+        if let Some(v) = self.data.get(&key) {
+            if self.addr == addr {
+                println!("{}", v);
+            } else {
+                addr.send_message(Answer(key, *v, true));
+            }
+        } else {
+            if let Some(n) = self.table.get_node(key) {
+                n.1.send_message(Get(addr, key));
+            }
+        }
         false
     }
 

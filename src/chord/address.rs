@@ -45,3 +45,9 @@ impl Address {
         json!({"id" : self.id, "host" : self.ip, "port" : self.port,})
     }
 }
+
+impl std::cmp::PartialEq for Address {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id && self.ip == other.ip && self.port == other.port
+    }
+}

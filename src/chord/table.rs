@@ -20,4 +20,16 @@ impl Table {
     pub fn previous(&self) -> (u64, Address) {
         self.previous.clone()
     }
+
+    pub fn get_node(&self, id: u64) -> Option<(u64, Address)> {
+        let candidate: Vec<(u64, Address)> = self
+            .association
+            .clone()
+            .into_iter()
+            .filter(|e| e.0 < id)
+            .collect();
+        println!("{:#?}", candidate);
+        let r: Option<(u64, Address)> = candidate.get(0).cloned();
+        return r;
+    }
 }
