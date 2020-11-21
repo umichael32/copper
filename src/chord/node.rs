@@ -130,7 +130,12 @@ impl Node {
             }
         }
     }
-    fn handle_answer_resp(&self, _args: Value) {}
+    fn handle_answer_resp(&self, args: Value) {
+        let addr: Address = get_addr_from_json(&args).unwrap();
+        if let Some(key) = args["key"].as_u64() {
+            println!("key {}, Responsible {:?}", key, addr);
+        }
+    }
 
     fn handle_put(&mut self, args: Value) {
         let addr: Address = get_addr_from_json(&args).unwrap();
