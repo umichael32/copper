@@ -1,21 +1,31 @@
 use crate::chord::address::Address;
 use crate::chord::error::NodeError;
-use crate::chord::message::Message;
-use crate::chord::message::Message::{Answer, Get, GetResp};
+use crate::chord::message::Message::{
+    Ack, Answer, AnswerResp, Exit, Get, GetResp, GetStat, Print, Put,
+};
 use crate::chord::table::Table;
-use serde_json::{json, Value};
+use serde_json::Value;
 use std::collections::HashMap;
-use std::fmt::Formatter;
 use std::io::Read;
 use std::net::{AddrParseError, Ipv4Addr, TcpListener, TcpStream};
-use std::ops::Add;
 
 #[derive(Debug)]
 pub struct Node {
     table: Table,
     data: HashMap<u64, f64>,
     addr: Address,
-    ack_vector: Box<Vec<u64>>,
+    ack_vector: Vec<u64>,
+    stats: (u64, u64, u64),
+    exit: bool,
+}
+
+fn get_addr_from_json(json_obj: &Value) -> Option<Address> {
+    let addr: Value = json_obj["address"].to_owned();
+    let ip: Result<Ipv4Addr, AddrParseError> = addr["host"].to_string().parse::<Ipv4Addr>();
+    match (addr["id"].as_u64(), ip, addr["port"].as_u64()) {
+        (Some(id), Ok(ip), Some(port)) => Some(Address::new(ip, port, id)),
+        _ => None,
+    }
 }
 
 impl Node {
@@ -25,7 +35,9 @@ impl Node {
             table: Table::new(1, addr.clone()),
             data: HashMap::new(),
             addr,
-            ack_vector: Box::new(Vec::new()),
+            ack_vector: Vec::new(),
+            stats: (0, 0, 0),
+            exit: false,
         };
     }
 
@@ -39,10 +51,9 @@ impl Node {
                     _ => return Err(NodeError::new(format!("message reception failed"))),
                 };
                 println!("Handle Message ");
-                if let Ok(end) = self.handle_message(stream) {
-                    if end {
-                        break;
-                    }
+                self.handle_message(stream);
+                if self.exit {
+                    break;
                 }
             }
             Ok(())
@@ -67,141 +78,153 @@ impl Node {
         }
     }
 
-    fn handle_message(&mut self, stream: TcpStream) -> Result<bool, NodeError> {
+    fn handle_message(&mut self, stream: TcpStream) {
         if let Some(v) = Node::read_parse(stream) {
             let s: &str = match v["cmd"].as_str() {
                 Some(s) => s,
-                None => return Err(NodeError::new(format!("something bad append"))),
+                None => return,
             };
-            let b = match s {
-                "exit" => self.handle_exit(v),
-                "ack" => self.handle_ack(v),
-                "answer" => self.handle_answer(v),
-                "answer_resp" => self.handle_answer_resp(v),
-                "stats" => self.handle_get_stat(v),
-                "print" => self.handle_print(v),
-                "get" => self.handle_get(v),
-                "get_resp" => self.handle_get_resp(v),
-                "put" => self.handle_put(v),
-                "hello" => self.handle_hello(v),
-                "hello_ok" => self.handle_hello_ok(v),
-                "hello_ko" => self.handle_hello_ko(v),
-                "update_table" => self.handle_update_table(v),
-                _ => false,
+            let args = v["args"].to_owned();
+            match s {
+                "exit" => self.handle_exit(args),
+                "ack" => self.handle_ack(args),
+                "answer" => self.handle_answer(args),
+                "answer_resp" => self.handle_answer_resp(args),
+                "stats" => self.handle_get_stat(args),
+                "print" => self.handle_print(args),
+                "get" => self.handle_get(args),
+                "get_resp" => self.handle_get_resp(args),
+                "put" => self.handle_put(args),
+                "hello" => self.handle_hello(args),
+                "hello_ok" => self.handle_hello_ok(args),
+                "hello_ko" => self.handle_hello_ko(args),
+                "update_table" => self.handle_update_table(args),
+                _ => {}
             };
-            Ok(b)
-        } else {
-            Err(NodeError::new(format!(
-                "error while reading the incoming message ( read parse ) "
-            )))
         }
     }
 
-    fn handle_exit(&self, _v: Value) -> bool {
-        let previous = self.table.previous();
+    fn handle_exit(&mut self, _v: Value) {
+        let previous: (u64, Address) = self.table.previous();
         if self.addr.get_id() != previous.0 {
-            previous.1.send_message(Message::Exit());
+            previous.1.send_message(Exit());
         }
-        return true;
+        self.exit = true;
     }
-    fn handle_ack(&mut self, v: Value) -> bool {
-        let args: Value = v["args"].to_owned();
+    fn handle_ack(&mut self, args: Value) {
         if let Some(id) = args["id"].as_u64() {
-            match self.ack_vector.iter().position(|x| *x == id) {
-                Some(index) => {
-                    println!("ack {} accepted", id);
-                    self.ack_vector.remove(index);
-                }
-                None => {}
+            if let Some(index) = self.ack_vector.iter().position(|x| *x == id) {
+                println!("ack {} accepted", id);
+                self.ack_vector.remove(index);
             }
         }
-        return false;
     }
-    fn handle_answer(&self, v: Value) -> bool {
-        let args: Value = v["args"].to_owned();
+    fn handle_answer(&self, args: Value) {
         if let Some(key) = args["key"].as_u64() {
             if let Some(exists) = args["value_exists"].as_bool() {
                 if exists {
-                    match args["value"].as_f64() {
-                        Some(requested_value) => {
-                            println!("the value of key {} is {}", key, requested_value)
-                        }
-                        None => {}
+                    if let Some(requested_value) = args["value"].as_f64() {
+                        println!("the value of key {} is {}", key, requested_value);
                     };
                 }
             }
         }
-        false
     }
-    fn handle_answer_resp(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
-        false
-    }
+    fn handle_answer_resp(&self, _args: Value) {}
 
-    fn handle_hello(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
-        false
-    }
-
-    fn handle_put(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
-        false
-    }
-
-    fn handle_get(&self, v: Value) -> bool {
-        let args: Value = v["args"].to_owned();
-        let addr: Value = args["address"].to_owned();
-        let ip: Result<Ipv4Addr, AddrParseError> = addr["host"].to_string().parse::<Ipv4Addr>();
-        let addr: Address = match (addr["id"].as_u64(), ip, addr["port"].as_u64()) {
-            (Some(id), Ok(ip), Some(port)) => Address::new(ip, port, id),
-            _ => return false,
-        };
-        let key = match args["key"].as_u64() {
-            Some(i) => i,
-            _ => return false,
-        };
-
-        if let Some(v) = self.data.get(&key) {
-            if self.addr == addr {
-                println!("{}", v);
-            } else {
-                addr.send_message(Answer(key, *v, true));
-            }
-        } else {
+    fn handle_put(&mut self, args: Value) {
+        let addr: Address = get_addr_from_json(&args).unwrap();
+        let id: u64 = args["id"].as_u64().unwrap();
+        if let Some(key) = args["key"].as_u64() {
             if let Some(n) = self.table.get_node(key) {
-                n.1.send_message(Get(addr, key));
+                if let Some(v) = args["value"].as_f64() {
+                    if self.addr.get_id() == n.0 {
+                        self.data.insert(key, v);
+                        addr.send_message(Ack(id));
+                    } else {
+                        n.1.send_message(Put(addr, key, v, id));
+                    }
+                }
             }
         }
-        false
     }
 
-    fn handle_get_resp(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
-        false
+    fn handle_get(&self, args: Value) {
+        let addr: Address = get_addr_from_json(&args).unwrap();
+        // Get request's key
+        if let Some(key) = args["key"].as_u64() {
+            // Try to see if the node already has the key
+            if let Some(v) = self.data.get(&key) {
+                // yes
+                if self.addr == addr {
+                    // If i'm the one who ask the key then i print it
+                    println!("{}", v);
+                } else {
+                    // else i send the response to the node who requested it
+                    addr.send_message(Answer(key, *v, true));
+                }
+            } else {
+                // if I do not own the key
+                // find which table has it
+                let (_0, _1): (u64, Address) = self.table.get_node(key).unwrap();
+                if self.addr.get_id() == _0 {
+                    // if i'm the one who normally has it then send an error
+                    addr.send_message(Answer(key, 0.0, false));
+                } else {
+                    // else send the request to the next node
+                    _1.send_message(Get(addr, key));
+                }
+            }
+        }
     }
 
-    fn handle_get_stat(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
-        false
+    fn handle_get_resp(&self, args: Value) {
+        let addr: Address = get_addr_from_json(&args).unwrap();
+        if let Some(key) = args["key"].as_u64() {
+            let (_0, _1): (u64, Address) = self.table.get_node(key).unwrap();
+            if self.addr.get_id() == _0 {
+                addr.send_message(AnswerResp(self.addr.get_id(), self.addr.clone()));
+            } else {
+                _1.send_message(GetResp(addr, key));
+            }
+        }
     }
 
-    fn handle_hello_ok(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
-        false
+    fn handle_get_stat(&self, args: Value) {
+        let previous: (u64, Address) = self.table.previous();
+        let addr: Address = get_addr_from_json(&args).unwrap();
+        let get = args["get_amt"].as_u64().unwrap();
+        let put = args["put_amt"].as_u64().unwrap();
+        let mgmt = args["mgmt_amt"].as_u64().unwrap();
+        if self.addr.get_id() != previous.0 {
+            previous.1.send_message(GetStat(
+                addr,
+                get + self.stats.0,
+                put + self.stats.1,
+                mgmt + self.stats.2,
+            ));
+        } else {
+            println!("get {}, put {}, management {}", get, put, mgmt);
+        }
     }
 
-    fn handle_hello_ko(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
-        false
+    fn handle_print(&self, args: Value) {
+        let previous: (u64, Address) = self.table.previous();
+        let addr: Address = get_addr_from_json(&args).unwrap();
+        if self.addr.get_id() != previous.0 {
+            println!(
+                "get {}, put {}, management {}",
+                self.stats.0, self.stats.1, self.stats.2
+            );
+            previous.1.send_message(Print(addr));
+        }
     }
 
-    fn handle_print(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
-        false
-    }
+    fn handle_hello(&self, _args: Value) {}
 
-    fn handle_update_table(&self, v: Value) -> bool {
-        let _args: Value = v["args"].to_owned();
-        false
-    }
+    fn handle_hello_ok(&self, _args: Value) {}
+
+    fn handle_hello_ko(&self, _args: Value) {}
+
+    fn handle_update_table(&self, _args: Value) {}
 }

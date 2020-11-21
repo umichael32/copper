@@ -12,7 +12,7 @@ pub enum Message {
     Answer(u64, f64, bool),
     AnswerResp(u64, Address),
     Exit(),
-    Put(Address, u64, u64, u64),
+    Put(Address, u64, f64, u64),
     Get(Address, u64),
     GetResp(Address, u64),
     GetStat(Address, u64, u64, u64),

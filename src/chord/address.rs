@@ -3,8 +3,6 @@ use std::io::prelude::*;
 use std::net::{Ipv4Addr, TcpStream};
 
 use crate::chord::message::Message;
-use std::fmt::Formatter;
-
 #[derive(Debug, Clone)]
 pub struct Address {
     ip: Ipv4Addr,
