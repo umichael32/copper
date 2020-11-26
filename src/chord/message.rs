@@ -18,9 +18,9 @@ pub enum Message {
     GetStat(Address, u64, u64, u64),
     Hello(Address),
     HelloKO(u64),
-    HelloOK(u64, Address, Value, Address, u64),
+    HelloOK(u64, Address, Value, Address),
     Print(Address),
-    UpdateTable(Address, u64, u64),
+    UpdateTable(Address, i64, i64),
 }
 
 impl Message {
@@ -52,9 +52,9 @@ impl Message {
                 json!({"address" : addr.to_json(), "get_amt" : get, "put_amt" : put, "mgmt_amt" : gestion  })
             ),
             Message::HelloKO(id) => json_builder!("hello_ko", json!({ "id": id })),
-            Message::HelloOK(id, addr_r, data, addr_p, id_request) => json_builder!(
+            Message::HelloOK(id, addr_r, data, addr_p) => json_builder!(
                 "hello_ok",
-                json!({"id" : id, "address_resp" : addr_r.to_json(), "data" : data , "address_previous" : addr_p.to_json(), "id_request" : id_request})
+                json!({"id" : id, "address_resp" : addr_r.to_json(), "data" : data , "address_previous" : addr_p.to_json()})
             ),
             Message::Print(addr) => json_builder!("print", json!({"address" : addr.to_json()})),
             Message::UpdateTable(addr, low_key, amount) => json_builder!(

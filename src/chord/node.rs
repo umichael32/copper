@@ -1,10 +1,10 @@
 use crate::chord::address::Address;
-use crate::chord::error::NodeError;
 use crate::chord::message::Message::{
-    Ack, Answer, AnswerResp, Exit, Get, GetResp, GetStat, Print, Put,
+    Ack, Answer, AnswerResp, Exit, Get, GetResp, GetStat, Hello, HelloKO, HelloOK, Print, Put,
+    UpdateTable,
 };
 use crate::chord::table::Table;
-use serde_json::Value;
+use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::io::Read;
 use std::net::{AddrParseError, Ipv4Addr, TcpListener, TcpStream};
@@ -19,9 +19,9 @@ pub struct Node {
     exit: bool,
 }
 
-fn get_addr_from_json(json_obj: &Value) -> Option<Address> {
-    let addr: Value = json_obj["address"].to_owned();
-    let ip: Result<Ipv4Addr, AddrParseError> = addr["host"].to_string().parse::<Ipv4Addr>();
+fn get_addr_from_json(json_obj: &Value, fields: &str) -> Option<Address> {
+    let addr: Value = json_obj[fields].to_owned();
+    let ip: Result<Ipv4Addr, AddrParseError> = addr["host"].as_str().unwrap().parse::<Ipv4Addr>();
     match (addr["id"].as_u64(), ip, addr["port"].as_u64()) {
         (Some(id), Ok(ip), Some(port)) => Some(Address::new(ip, port, id)),
         _ => None,
@@ -29,10 +29,10 @@ fn get_addr_from_json(json_obj: &Value) -> Option<Address> {
 }
 
 impl Node {
-    pub fn new(ip: Ipv4Addr, port: u64) -> Node {
-        let addr = Address::new(ip, port, 1);
+    pub fn new(ip: Ipv4Addr, port: u64, id: u64) -> Node {
+        let addr = Address::new(ip, port, id);
         return Node {
-            table: Table::new(1, addr.clone()),
+            table: Table::new(id, addr.clone()),
             data: HashMap::new(),
             addr,
             ack_vector: Vec::new(),
@@ -40,30 +40,32 @@ impl Node {
             exit: false,
         };
     }
+    pub fn get_addr(&self) -> Address {
+        return self.addr.clone();
+    }
 
-    pub fn listen(&mut self) -> Result<(), NodeError> {
-        return if let Ok(sock) =
+    pub fn listen(&mut self) {
+        if let Ok(sock) =
             TcpListener::bind(format!("{}:{}", self.addr.get_ip(), self.addr.get_port()))
         {
             for stream in sock.incoming() {
-                let stream: TcpStream = match stream {
-                    Ok(s) => s,
-                    _ => return Err(NodeError::new(format!("message reception failed"))),
-                };
-                println!("Handle Message ");
-                self.handle_message(stream);
-                if self.exit {
-                    break;
+                if let Ok(s) = stream {
+                    self.handle_message(s);
+                    println!("{:?}", self);
+                    if self.exit {
+                        break;
+                    }
+                } else {
+                    println!("Message reception failed");
                 }
             }
-            Ok(())
         } else {
-            Err(NodeError::new(format!(
+            println!(
                 "Connection ip : {} on port : {} is not allowed",
                 self.addr.get_ip(),
                 self.addr.get_port()
-            )))
-        };
+            )
+        }
     }
 
     fn read_parse(mut stream: TcpStream) -> Option<Value> {
@@ -84,6 +86,7 @@ impl Node {
                 Some(s) => s,
                 None => return,
             };
+            println!("I received : {}", s);
             let args = v["args"].to_owned();
             match s {
                 "exit" => self.handle_exit(args),
@@ -131,31 +134,39 @@ impl Node {
         }
     }
     fn handle_answer_resp(&self, args: Value) {
-        let addr: Address = get_addr_from_json(&args).unwrap();
+        let addr: Address = get_addr_from_json(&args, "address").unwrap();
         if let Some(key) = args["key"].as_u64() {
             println!("key {}, Responsible {:?}", key, addr);
         }
     }
 
     fn handle_put(&mut self, args: Value) {
-        let addr: Address = get_addr_from_json(&args).unwrap();
+        let addr: Address = get_addr_from_json(&args, "address").unwrap();
         let id: u64 = args["id"].as_u64().unwrap();
         if let Some(key) = args["key"].as_u64() {
             if let Some(n) = self.table.get_node(key) {
                 if let Some(v) = args["value"].as_f64() {
                     if self.addr.get_id() == n.0 {
+                        println!("PUT : I'm updating my data");
                         self.data.insert(key, v);
                         addr.send_message(Ack(id));
                     } else {
+                        println!("PUT : Send the message to the next node");
                         n.1.send_message(Put(addr, key, v, id));
                     }
+                } else {
+                    println!("PUT : Value problem");
                 }
+            } else {
+                println!("PUT : Node problem");
             }
+        } else {
+            println!("PUT : Key problem");
         }
     }
 
     fn handle_get(&self, args: Value) {
-        let addr: Address = get_addr_from_json(&args).unwrap();
+        let addr: Address = get_addr_from_json(&args, "address").unwrap();
         // Get request's key
         if let Some(key) = args["key"].as_u64() {
             // Try to see if the node already has the key
@@ -184,7 +195,7 @@ impl Node {
     }
 
     fn handle_get_resp(&self, args: Value) {
-        let addr: Address = get_addr_from_json(&args).unwrap();
+        let addr: Address = get_addr_from_json(&args, "address").unwrap();
         if let Some(key) = args["key"].as_u64() {
             let (_0, _1): (u64, Address) = self.table.get_node(key).unwrap();
             if self.addr.get_id() == _0 {
@@ -197,7 +208,7 @@ impl Node {
 
     fn handle_get_stat(&self, args: Value) {
         let previous: (u64, Address) = self.table.previous();
-        let addr: Address = get_addr_from_json(&args).unwrap();
+        let addr: Address = get_addr_from_json(&args, "address").unwrap();
         let get = args["get_amt"].as_u64().unwrap();
         let put = args["put_amt"].as_u64().unwrap();
         let mgmt = args["mgmt_amt"].as_u64().unwrap();
@@ -215,7 +226,7 @@ impl Node {
 
     fn handle_print(&self, args: Value) {
         let previous: (u64, Address) = self.table.previous();
-        let addr: Address = get_addr_from_json(&args).unwrap();
+        let addr: Address = get_addr_from_json(&args, "address").unwrap();
         if self.addr.get_id() != previous.0 {
             println!(
                 "get {}, put {}, management {}",
@@ -225,11 +236,65 @@ impl Node {
         }
     }
 
-    fn handle_hello(&self, _args: Value) {}
+    fn handle_hello(&mut self, args: Value) {
+        let addr: Address = get_addr_from_json(&args, "address").unwrap();
+        let resp: Option<(u64, Address)> = self.table.get_node(addr.get_id());
+        if let Some(resp) = resp {
+            if resp.0 != self.addr.get_id() {
+                resp.1.send_message(Hello(addr));
+            } else if self.addr.get_id() == addr.get_id() {
+                addr.send_message(HelloKO(addr.get_id()));
+            } else {
+                let node_data: HashMap<u64, f64> = self
+                    .data
+                    .clone()
+                    .into_iter()
+                    .filter(|c| {
+                        c.0 <= addr.get_id()
+                            || self.table.previous().1.get_id() > self.addr.get_id()
+                    })
+                    .collect();
 
-    fn handle_hello_ok(&self, _args: Value) {}
+                for x in node_data.keys() {
+                    self.data.remove(x);
+                }
 
-    fn handle_hello_ko(&self, _args: Value) {}
+                let (_old_previous_id, old_previous_addr) = self.table.previous();
+
+                self.table.previous = (addr.get_id(), addr.clone());
+
+                let data: Value = json!(node_data);
+
+                addr.send_message(HelloOK(
+                    addr.get_id(),
+                    self.addr.clone(),
+                    data,
+                    self.table.previous().1.clone(),
+                ));
+                old_previous_addr.send_message(UpdateTable(addr.clone(), -1, -1));
+            }
+        }
+    }
+
+    fn handle_hello_ok(&mut self, args: Value) {
+        let addr_previous = get_addr_from_json(&args, "address_previous");
+        let addr_resp = get_addr_from_json(&args, "address_resp");
+        if let Some(addr_previous) = addr_previous {
+            if let Some(addr_resp) = addr_resp {
+                self.table.previous = (addr_previous.get_id(), addr_previous);
+                self.table
+                    .association
+                    .insert(self.addr.get_id() + 1, addr_resp);
+                let data: HashMap<u64, f64> =
+                    serde_json::from_str(args["data"].as_str().unwrap()).unwrap();
+                self.data = data;
+            }
+        }
+    }
+
+    fn handle_hello_ko(&mut self, _args: Value) {
+        self.exit = true;
+    }
 
     fn handle_update_table(&self, _args: Value) {}
 }

@@ -3,8 +3,8 @@ use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct Table {
-    previous: (u64, Address),
-    association: HashMap<u64, Address>,
+    pub(crate) previous: (u64, Address),
+    pub association: HashMap<u64, Address>,
 }
 
 impl Table {
@@ -26,9 +26,8 @@ impl Table {
             .association
             .clone()
             .into_iter()
-            .filter(|e| e.0 < id)
+            .filter(|e| e.0 >= id)
             .collect();
-        println!("{:#?}", candidate);
         let r: Option<(u64, Address)> = candidate.get(0).cloned();
         return r;
     }
