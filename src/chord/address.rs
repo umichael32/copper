@@ -33,6 +33,7 @@ impl Address {
 
     pub fn send_message(&self, mess: Message) -> Option<usize> {
         let str_mess: String = mess.to_json().to_string();
+        println!("I'm sending the message {} to {:?}", str_mess, self);
         match self.connect() {
             Some(mut s) => s.write(str_mess.as_bytes()).ok(),
             _ => None,
