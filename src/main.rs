@@ -21,8 +21,8 @@ fn main() {
         2 => {
             let ip: Option<&str> = args["arg"]["ip_l"].as_str();
             let ip: Result<Ipv4Addr, AddrParseError> = ip.unwrap().parse::<Ipv4Addr>();
-            let port: u64 = args["arg"]["port_l"].as_u64().unwrap();
-            let id: u64 = args["arg"]["id"].as_u64().unwrap();
+            let port: i64 = args["arg"]["port_l"].as_i64().unwrap();
+            let id: i64 = args["arg"]["id"].as_i64().unwrap();
             let n: Node = Node::new(ip.unwrap(), port, id);
             let addr_s = n.get_addr();
             println!("{:?}", n);
@@ -30,7 +30,7 @@ fn main() {
 
             let ip: Option<&str> = args["arg"]["ip_d"].as_str();
             let ip: Result<Ipv4Addr, AddrParseError> = ip.unwrap().parse::<Ipv4Addr>();
-            let port: u64 = args["arg"]["port_d"].as_u64().unwrap();
+            let port: i64 = args["arg"]["port_d"].as_i64().unwrap();
             let addr_d = Address::new(ip.unwrap(), port, 0);
             addr_d.send_message(Hello(addr_s));
 
@@ -39,8 +39,8 @@ fn main() {
         1 => {
             let ip: Option<&str> = args["arg"]["ip"].as_str();
             let ip: Result<Ipv4Addr, AddrParseError> = ip.unwrap().parse::<Ipv4Addr>();
-            let port: u64 = args["arg"]["port"].as_u64().unwrap();
-            let id: u64 = args["arg"]["id"].as_u64().unwrap();
+            let port: i64 = args["arg"]["port"].as_i64().unwrap();
+            let id: i64 = args["arg"]["id"].as_i64().unwrap();
             let n: Node = Node::new(ip.unwrap(), port, id);
             println!("{:?}", n);
             listen(n)

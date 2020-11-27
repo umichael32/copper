@@ -6,16 +6,16 @@ use crate::chord::message::Message;
 #[derive(Debug, Clone)]
 pub struct Address {
     ip: Ipv4Addr,
-    port: u64,
-    id: u64,
+    port: i64,
+    id: i64,
 }
 
 impl Address {
-    pub fn new(ip: Ipv4Addr, port: u64, id: u64) -> Address {
+    pub fn new(ip: Ipv4Addr, port: i64, id: i64) -> Address {
         return Address { ip, port, id };
     }
 
-    pub fn get_id(&self) -> u64 {
+    pub fn get_id(&self) -> i64 {
         return self.id;
     }
 
@@ -23,7 +23,7 @@ impl Address {
         return self.ip;
     }
 
-    pub fn get_port(&self) -> u64 {
+    pub fn get_port(&self) -> i64 {
         return self.port;
     }
 

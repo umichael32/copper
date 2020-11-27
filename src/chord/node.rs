@@ -9,21 +9,24 @@ use std::io::Read;
 use std::net::{AddrParseError, Ipv4Addr, TcpListener, TcpStream};
 use std::thread::JoinHandle;
 
+const MAX_NODE: i64 = 32;
+const HALF_CIRCLE: i64 = MAX_NODE / 2;
+
 #[derive(Debug)]
 pub struct Node {
-    previous: (u64, Address),
-    association: HashMap<u64, Address>,
-    data: HashMap<u64, f64>,
+    previous: (i64, Address),
+    association: HashMap<i64, Address>,
+    data: HashMap<i64, f64>,
     addr: Address,
-    ack_vector: Vec<u64>,
-    stats: (u64, u64, u64),
+    ack_vector: Vec<i64>,
+    stats: (i64, i64, i64),
     exit: bool,
 }
 
 fn get_addr_from_json(json_obj: &Value, fields: &str) -> Option<Address> {
     let addr: Value = json_obj[fields].to_owned();
     let ip: Result<Ipv4Addr, AddrParseError> = addr["host"].as_str().unwrap().parse::<Ipv4Addr>();
-    match (addr["id"].as_u64(), ip, addr["port"].as_u64()) {
+    match (addr["id"].as_i64(), ip, addr["port"].as_i64()) {
         (Some(id), Ok(ip), Some(port)) => Some(Address::new(ip, port, id)),
         _ => None,
     }
@@ -47,7 +50,7 @@ pub fn listen(mut n: Node) -> Option<JoinHandle<()>> {
             for stream in sock.incoming() {
                 if let Ok(s) = stream {
                     n.handle_message(s);
-                    println!("{:?}", n);
+                    println!("{:#?}", n);
                     if n.exit {
                         println!("exit");
                         break;
@@ -69,9 +72,10 @@ pub fn listen(mut n: Node) -> Option<JoinHandle<()>> {
 }
 
 impl Node {
-    pub fn new(ip: Ipv4Addr, port: u64, id: u64) -> Node {
+    pub fn new(ip: Ipv4Addr, port: i64, id: i64) -> Node {
+        let id = id % MAX_NODE;
         let addr = Address::new(ip, port, id);
-        let mut n = Node {
+        let mut n: Node = Node {
             previous: (id, addr.clone()),
             association: HashMap::new(),
             data: HashMap::new(),
@@ -80,7 +84,12 @@ impl Node {
             stats: (0, 0, 0),
             exit: false,
         };
-        n.association.insert(id, addr);
+        let mut idx: i64 = 1;
+        while idx <= HALF_CIRCLE {
+            n.association
+                .insert((n.addr.get_id() + idx) % MAX_NODE, addr.clone());
+            idx *= 2;
+        }
         n
     }
     pub fn get_addr(&self) -> Address {
@@ -117,14 +126,14 @@ impl Node {
     }
 
     fn handle_exit(&mut self, _v: Value) {
-        let previous: (u64, Address) = self.previous();
+        let previous: (i64, Address) = self.previous();
         if self.addr.get_id() != previous.0 {
             previous.1.send_message(Exit());
         }
         self.exit = true;
     }
     fn handle_ack(&mut self, args: Value) {
-        if let Some(id) = args["id"].as_u64() {
+        if let Some(id) = args["id"].as_i64() {
             if let Some(index) = self.ack_vector.iter().position(|x| *x == id) {
                 println!("ack {} accepted", id);
                 self.ack_vector.remove(index);
@@ -142,17 +151,17 @@ impl Node {
             }
         }
     }
-    fn handle_answer_resp(&self, args: Value) {
+    fn handle_answer_resp(&mut self, args: Value) {
         let addr: Address = get_addr_from_json(&args, "address").unwrap();
-        if let Some(key) = args["key"].as_u64() {
-            println!("key {}, Responsible {:?}", key, addr);
+        if let Some(key) = args["key"].as_i64() {
+            self.association.insert(key, addr);
         }
     }
 
     fn handle_put(&mut self, args: Value) {
         let addr: Address = get_addr_from_json(&args, "address").unwrap();
-        let id: u64 = args["id"].as_u64().unwrap();
-        if let Some(key) = args["key"].as_u64() {
+        let id: i64 = args["id"].as_i64().unwrap();
+        if let Some(key) = args["key"].as_i64() {
             if let Some(n) = self.find_resp_in_table(key) {
                 if let Some(v) = args["value"].as_f64() {
                     if self.addr.get_id() == n.get_id() {
@@ -177,7 +186,7 @@ impl Node {
     fn handle_get(&self, args: Value) {
         let addr: Address = get_addr_from_json(&args, "address").unwrap();
         // Get request's key
-        if let Some(key) = args["key"].as_u64() {
+        if let Some(key) = args["key"].as_i64() {
             // Try to see if the node already has the key
             if let Some(v) = self.data.get(&key) {
                 // yes
@@ -205,10 +214,10 @@ impl Node {
 
     fn handle_get_resp(&self, args: Value) {
         let addr: Address = get_addr_from_json(&args, "address").unwrap();
-        if let Some(key) = args["key"].as_u64() {
+        if let Some(key) = args["key"].as_i64() {
             let next_addr: Address = self.find_resp_in_table(key).unwrap();
             if self.addr.get_id() == next_addr.get_id() {
-                addr.send_message(AnswerResp(self.addr.get_id(), self.addr.clone()));
+                addr.send_message(AnswerResp(key, self.addr.clone()));
             } else {
                 next_addr.send_message(GetResp(addr, key));
             }
@@ -216,11 +225,11 @@ impl Node {
     }
 
     fn handle_get_stat(&self, args: Value) {
-        let previous: (u64, Address) = self.previous();
+        let previous: (i64, Address) = self.previous();
         let addr: Address = get_addr_from_json(&args, "address").unwrap();
-        let get = args["get_amt"].as_u64().unwrap();
-        let put = args["put_amt"].as_u64().unwrap();
-        let mgmt = args["mgmt_amt"].as_u64().unwrap();
+        let get = args["get_amt"].as_i64().unwrap();
+        let put = args["put_amt"].as_i64().unwrap();
+        let mgmt = args["mgmt_amt"].as_i64().unwrap();
         if self.addr.get_id() != previous.0 {
             previous.1.send_message(GetStat(
                 addr,
@@ -234,7 +243,7 @@ impl Node {
     }
 
     fn handle_print(&self, args: Value) {
-        let previous: (u64, Address) = self.previous();
+        let previous: (i64, Address) = self.previous();
         let addr: Address = get_addr_from_json(&args, "address").unwrap();
         if self.addr.get_id() != previous.0 {
             println!(
@@ -255,7 +264,7 @@ impl Node {
             } else if self.addr.get_id() == addr.get_id() {
                 addr.send_message(HelloKO(addr.get_id()));
             } else {
-                let node_data: HashMap<u64, f64> = self
+                let node_data: HashMap<i64, f64> = self
                     .data
                     .clone()
                     .into_iter()
@@ -280,7 +289,6 @@ impl Node {
                     data,
                     old_previous_addr.clone(),
                 ));
-                old_previous_addr.send_message(UpdateTable(addr.clone(), -1, -1));
             }
         } else {
             println!("something went wrong while searching the responsible")
@@ -294,11 +302,16 @@ impl Node {
             if let Some(addr_resp) = addr_resp {
                 println!("toto");
                 self.previous = (addr_previous.get_id(), addr_previous);
-                self.association.insert(self.addr.get_id() + 1, addr_resp);
                 if let Some(data) = args["data"].as_str() {
-                    let data: HashMap<u64, f64> = serde_json::from_str(data).unwrap();
+                    let data: HashMap<i64, f64> = serde_json::from_str(data).unwrap();
                     self.data = data;
                 }
+                for (a, _b) in self.association.clone() {
+                    addr_resp.send_message(GetResp(self.addr.clone(), a));
+                }
+                self.previous
+                    .1
+                    .send_message(UpdateTable(self.addr.clone(), -1, -1));
             } else {
                 println!("something went wrong with the resp address")
             }
@@ -311,18 +324,61 @@ impl Node {
         self.exit = true;
     }
 
-    fn handle_update_table(&self, _args: Value) {}
+    fn handle_update_table(&mut self, args: Value) {
+        let addr: Address = get_addr_from_json(&args, "address").unwrap();
+        for (a, b) in self.association.clone() {
+            if addr.get_id() > self.addr.get_id() {
+                if (addr.get_id() > a && b.get_id() < addr.get_id()) && b.get_id() < a {
+                    self.association.insert(a, addr.clone());
+                }
+            } else {
+                if (addr.get_id() + MAX_NODE > a && b.get_id() < addr.get_id() + MAX_NODE)
+                    && b.get_id() < a
+                {
+                    self.association.insert(a, addr.clone());
+                }
+            }
+        }
+    }
 
-    pub fn previous(&self) -> (u64, Address) {
+    pub fn previous(&self) -> (i64, Address) {
         self.previous.clone()
     }
 
-    pub fn find_resp_in_table(&self, id: u64) -> Option<Address> {
-        if self.previous.0 == self.addr.get_id()
-            || (id < self.addr.get_id() && id > self.previous.0)
-            || id > self.previous.0
+    pub fn find_resp_in_table(&self, id: i64) -> Option<Address> {
+        if (self.previous.0 == self.addr.get_id())
+            || (id <= self.addr.get_id() && id > self.previous.0)
+            || (id > self.previous.0
+                && self.addr.get_id() > 0
+                && self.previous.0 > self.addr.get_id())
+            || (id > 0 && self.previous.0 > self.addr.get_id() && id <= self.addr.get_id())
         {
             return Some(self.addr.clone());
+        } else {
+            let exact_resp: Vec<(i64, Address)> = self
+                .association
+                .clone()
+                .into_iter()
+                .filter(|couple| couple.0 >= id && couple.1.get_id() <= id)
+                .collect();
+            println!("{:?}", exact_resp);
+            if !exact_resp.is_empty() {
+                return Some(exact_resp[0].1.clone());
+            }
+
+            let mut nearest_resp: Vec<(i64, Address)> = self
+                .association
+                .clone()
+                .into_iter()
+                .filter(|couple| couple.0 < id)
+                .collect();
+            nearest_resp.sort_by(|a, b| a.0.cmp(&b.0));
+
+            println!("{:?}", nearest_resp);
+
+            if !nearest_resp.is_empty() {
+                return Some(nearest_resp[0].1.clone());
+            }
         }
         None
     }

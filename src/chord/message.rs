@@ -8,17 +8,17 @@ macro_rules! json_builder {
 }
 
 pub enum Message {
-    Ack(u64),
-    Answer(u64, f64, bool),
-    AnswerResp(u64, Address),
+    Ack(i64),
+    Answer(i64, f64, bool),
+    AnswerResp(i64, Address),
     Exit(),
-    Put(Address, u64, f64, u64),
-    Get(Address, u64),
-    GetResp(Address, u64),
-    GetStat(Address, u64, u64, u64),
+    Put(Address, i64, f64, i64),
+    Get(Address, i64),
+    GetResp(Address, i64),
+    GetStat(Address, i64, i64, i64),
     Hello(Address),
-    HelloKO(u64),
-    HelloOK(u64, Address, Value, Address),
+    HelloKO(i64),
+    HelloOK(i64, Address, Value, Address),
     Print(Address),
     UpdateTable(Address, i64, i64),
 }
