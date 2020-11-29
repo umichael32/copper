@@ -1,41 +1,56 @@
-use crate::app::error::ParamError;
-use serde_json::{json, Value};
 use std::{env::args, net::Ipv4Addr};
 
-pub fn get_args() -> Result<Value, ParamError> {
-    match args().len() {
+pub enum Param {
+    Short {
+        ip: Ipv4Addr,
+        port: i64,
+        id: i64,
+    },
+    Long {
+        ip_local: Ipv4Addr,
+        port_local: i64,
+        id_local: i64,
+        ip_destination: Ipv4Addr,
+        port_destination: i64,
+    },
+}
+
+pub fn get_args() -> Option<Param> {
+    let args: Vec<String> = args().collect();
+    let args = args.as_slice();
+    match args.len() {
         4 => match (
-            (args().nth(1).unwrap()).parse::<Ipv4Addr>(),
-            (args().nth(2).unwrap()).parse::<u32>(),
-            (args().nth(3).unwrap()).parse::<u64>(),
+            args[1].parse::<Ipv4Addr>(),
+            args[2].parse::<i64>(),
+            args[3].parse::<i64>(),
         ) {
-            (Ok(ip), Ok(port), Ok(id)) => {
-                Ok(json!({"type" : 1 , "arg" : { "ip" : ip ,"port": port , "id" : id }}))
-            }
-            _ => Err(ParamError::new(String::from(
-                "use should be : copper <ip> <port>",
-            ))),
+            (Ok(ip), Ok(port), Ok(id)) => Some(Param::Short { ip, port, id }),
+            _ => None,
         },
         6 => {
-            let info: (Ipv4Addr, u32,u64, Ipv4Addr, u32) =
-                match (
-                    (args().nth(1).unwrap()).parse::<Ipv4Addr>(),
-                    (args().nth(2).unwrap()).parse::<u32>(),
-                    (args().nth(3).unwrap()).parse::<u64>(),
-                    (args().nth(4).unwrap()).parse::<Ipv4Addr>(),
-                    (args().nth(5).unwrap()).parse::<u32>(),
-                ) {
-                    (Ok(ip_l), Ok(port_l), Ok(id),Ok(ip_d), Ok(port_d)) => (ip_l, port_l,id, ip_d, port_d),
-                    _ => return Err(ParamError::new(String::from(
-                        "port_l and port_d should be digits and ip_l and ip_d should have this format x.x.x.x",
-                    ))),
-                };
-            Ok(
-                json!({ "type" : 2 ,"arg" : { "ip_l" : info.0,"port_l": info.1 ,"id" : info.2,"ip_d" : info.3  ,"port_d" : info.4}}),
-            )
+            match (
+                args[1].parse::<Ipv4Addr>(),
+                args[2].parse::<i64>(),
+                args[3].parse::<i64>(),
+                args[4].parse::<Ipv4Addr>(),
+                args[5].parse::<i64>(),
+            ) {
+                (
+                    Ok(ip_local),
+                    Ok(port_local),
+                    Ok(id_local),
+                    Ok(ip_destination),
+                    Ok(port_destination),
+                ) => Some(Param::Long {
+                    ip_local,
+                    port_local,
+                    id_local,
+                    ip_destination,
+                    port_destination,
+                }),
+                _ => None,
+            }
         }
-        _ => Err(ParamError::new(String::from(
-            "usage : main <port> or main <ip_l> <port_l> <ip_d> <port_d> ",
-        ))),
+        _ => None,
     }
 }

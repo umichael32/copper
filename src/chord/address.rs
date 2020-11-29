@@ -41,7 +41,7 @@ impl Address {
     }
 
     pub fn to_json(&self) -> Value {
-        json!({"id" : self.id, "host" : self.ip, "port" : self.port,})
+        json!({"id" : self.id, "ip" : self.ip, "port" : self.port,})
     }
 }
 
