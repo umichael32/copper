@@ -3,24 +3,24 @@ use serde_json::{json, Value};
 
 macro_rules! json_builder {
     ($cmd:expr, $arg:expr) => {
-        json!({"cmd" : $cmd , "arg" : $arg })
+        json!({"cmd" : $cmd , "args" : $arg })
     };
 }
 
 pub enum Message {
-    Ack(u32),
-    Answer(u32, u32, bool),
-    AnswerResp(u32, Address),
+    Ack(i64),
+    Answer(i64, f64, bool),
+    AnswerResp(i64, Address),
     Exit(),
-    Put(Address, u32, u32, u32),
-    Get(Address, u32),
-    GetResp(Address, u32),
-    GetStat(Address, u32, u32, u32),
+    Put(Address, i64, f64, i64),
+    Get(Address, i64),
+    GetResp(Address, i64),
+    GetStat(Address, i64, i64, i64),
     Hello(Address),
-    HelloKO(u32),
-    HelloOK(u32, Address, Value, Address, u32),
+    HelloKO(i64),
+    HelloOK(i64, Address, Value, Address),
     Print(Address),
-    UpdateTable(Address, i32, i32),
+    UpdateTable(Address, i64, i64),
 }
 
 impl Message {
@@ -48,13 +48,13 @@ impl Message {
                 json_builder!("get_resp", json!({"address" : addr.to_json(), "key" : key}))
             }
             Message::GetStat(addr, get, put, gestion) => json_builder!(
-                "get_stat",
-                json!({"address" : addr.to_json(), "get" : get, "put" : put, "gestion" : gestion  })
+                "stats",
+                json!({"address" : addr.to_json(), "get_amt" : get, "put_amt" : put, "mgt_amt" : gestion  })
             ),
             Message::HelloKO(id) => json_builder!("hello_ko", json!({ "id": id })),
-            Message::HelloOK(id, addr_r, data, addr_p, id_request) => json_builder!(
+            Message::HelloOK(id, addr_r, data, addr_p) => json_builder!(
                 "hello_ok",
-                json!({"id_request" : id, "address_resp" : addr_r.to_json(), "data" : data , "address_previous" : addr_p.to_json(), "id_request" : id_request})
+                json!({"id" : id, "address_resp" : addr_r.to_json(), "data" : data , "address_previous" : addr_p.to_json()})
             ),
             Message::Print(addr) => json_builder!("print", json!({"address" : addr.to_json()})),
             Message::UpdateTable(addr, low_key, amount) => json_builder!(
