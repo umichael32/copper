@@ -353,41 +353,50 @@ impl Node {
             }
         }
     }
-
-    pub fn find_resp_in_table(&self, id: i64) -> Option<Address> {
+    fn is_between(id: i64, lower: i64, upper: i64) -> bool {
+        return (lower == upper)
+            || (id <= upper && id > lower)
+            || (id > lower && upper >= 0 && lower > upper)
+            || (id >= 0 && lower > upper && id <= upper)
+            || (id == upper);
+    }
+    fn is_mine(&self, id: i64) -> bool {
         let previous_id: i64 = self.previous.get_id();
         let my_id: i64 = self.addr.get_id();
-        if (previous_id == my_id)
-            || (id <= my_id && id > previous_id)
-            || (id > previous_id && my_id >= 0 && previous_id > my_id)
-            || (id >= 0 && previous_id > my_id && id <= my_id)
-            || (id == my_id)
-        {
-            return Some(self.addr.clone());
-        } else if previous_id == id {
-            return Some(self.previous.clone());
-        } else {
-            let exact_resp: Vec<(i64, Address)> = self
-                .association
-                .clone()
-                .into_iter()
-                .filter(|couple| (couple.0 >= id && couple.1.get_id() <= id) || couple.0 == id)
-                .collect();
-            if !exact_resp.is_empty() {
-                return Some(exact_resp[0].1.clone());
+        return Node::is_between(id, previous_id, my_id);
+    }
+    fn next_is_the_owner(&self, id: i64) -> Option<Address> {
+        let next_association: i64 = self.addr.get_id() + 1;
+        if let Some(a) = self.association.get(&next_association) {
+            if Node::is_between(id, self.addr.get_id(), a.get_id()) {
+                Some(a.clone())
+            } else {
+                None
             }
+        } else {
+            None
+        }
+    }
 
+    pub fn find_resp_in_table(&self, id: i64) -> Option<Address> {
+        let id: i64 = id % MAX_NODE;
+        return if self.is_mine(id) {
+            Some(self.addr.clone())
+        } else if let Some(a) = self.next_is_the_owner(id) {
+            Some(a)
+        } else {
             let mut nearest_resp: Vec<(i64, Address)> = self
                 .association
                 .clone()
                 .into_iter()
-                .filter(|couple| couple.0 < id)
+                .filter(|couple| couple.1.get_id() < id)
                 .collect();
             nearest_resp.sort_by(|a, b| a.0.cmp(&b.0));
             if !nearest_resp.is_empty() {
-                return Some(nearest_resp[0].1.clone());
+                Some(nearest_resp[0].1.clone())
+            } else {
+                None
             }
-        }
-        None
+        };
     }
 }
