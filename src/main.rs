@@ -7,6 +7,7 @@ use chord::message::Message::Hello;
 use chord::node::{listen, Node};
 use std::thread::JoinHandle;
 
+// V2
 fn main() {
     if let Some(param) = get_args() {
         let t: Option<JoinHandle<()>> = match param {
