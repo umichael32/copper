@@ -309,14 +309,16 @@ impl Node {
                 if let Some(data) = args["data"].as_str() {
                     self.data = serde_json::from_str(data).unwrap();
                 }
-                let amount = if self.previous.get_id() > self.addr.get_id() {
+                let amount: i64 = if self.previous.get_id() > self.addr.get_id() {
                     MAX_NODE - self.previous.get_id() + (self.addr.get_id() - 1)
                 } else {
                     self.addr.get_id() - self.previous.get_id()
                 };
+                // Send message to the first node which is higher than you plus one minus half_circle modulo circle_size
+                // or forward to the higher one in your table
                 self.previous.send_message(UpdateTable(
                     self.addr.clone(),
-                    self.previous.get_id() + 1,
+                    (self.previous.get_id() + 1 - HALF_CIRCLE) % MAX_NODE,
                     amount,
                 ));
                 for (&a, _b) in self.association.iter() {
@@ -333,26 +335,33 @@ impl Node {
     fn handle_update_table(&mut self, args: Value) {
         self.mgt += 1;
         if let Some(addr) = get_addr_from_json(&args, "address") {
-            let id: i64 = addr.get_id();
-            let my_id: i64 = self.addr.get_id();
+            match (args["id_lower_key"].as_i64(), args["amount"].as_i64()) {
+                (Some(id_lk), Some(amt)) => {
+                    if self.addr.get_id() >= id_lk {
+                        let id: i64 = addr.get_id();
+                        let my_id: i64 = self.addr.get_id();
+                        self.association = self
+                            .association
+                            .iter()
+                            .map(|(&pointed_key, pointed_addr)| {
+                                let id: i64 = if id == 0 { MAX_NODE } else { id };
+                                return if id >= pointed_key
+                                    && (pointed_addr.get_id() > id
+                                        || pointed_addr.get_id() == my_id)
+                                {
+                                    (pointed_key, addr.clone())
+                                } else {
+                                    (pointed_key, pointed_addr.clone())
+                                };
+                            })
+                            .collect();
 
-            self.association = self
-                .association
-                .iter()
-                .map(|(&pointed_key, pointed_addr)| {
-                    let id: i64 = if id == 0 { MAX_NODE } else { id };
-                    return if id >= pointed_key
-                        && (pointed_addr.get_id() > id || pointed_addr.get_id() == my_id)
-                    {
-                        (pointed_key, addr.clone())
-                    } else {
-                        (pointed_key, pointed_addr.clone())
-                    };
-                })
-                .collect();
-
-            if self.addr != addr {
-                self.previous.send_message(UpdateTable(addr, -1, -1));
+                        if self.addr != addr {
+                            self.previous.send_message(UpdateTable(addr, id_lk, amt));
+                        }
+                    }
+                }
+                _ => {}
             }
         }
     }
