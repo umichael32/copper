@@ -10,12 +10,11 @@ use std::net::{AddrParseError, Ipv4Addr, TcpListener, TcpStream};
 use std::thread::JoinHandle;
 
 const MAX_NODE: i64 = 32;
-const HALF_CIRCLE: i64 = MAX_NODE / 2;
 
 #[derive(Debug)]
 pub struct Node {
     previous: Address,
-    association: HashMap<i64, Address>,
+    next: Address,
     data: HashMap<i64, f64>,
     addr: Address,
     ack_vector: Vec<i64>,
@@ -74,9 +73,9 @@ impl Node {
     pub fn new(ip: Ipv4Addr, port: i64, id: i64) -> Node {
         let id: i64 = id % MAX_NODE;
         let addr: Address = Address::new(ip, port, id);
-        let mut n: Node = Node {
+        Node {
             previous: addr.clone(),
-            association: HashMap::new(),
+            next: addr.clone(),
             data: HashMap::new(),
             addr: addr.clone(),
             ack_vector: Vec::new(),
@@ -84,14 +83,7 @@ impl Node {
             put: 0,
             mgt: 0,
             exit: false,
-        };
-        let mut idx: i64 = 1;
-        while idx <= HALF_CIRCLE {
-            n.association
-                .insert((n.addr.get_id() + idx) % MAX_NODE, addr.clone());
-            idx *= 2;
         }
-        n
     }
     pub fn get_addr(&self) -> Address {
         return self.addr.clone();
@@ -150,7 +142,7 @@ impl Node {
     fn handle_answer_resp(&mut self, args: Value) {
         if let Some(addr) = get_addr_from_json(&args, "address") {
             if let Some(key) = args["key"].as_i64() {
-                self.association.insert(key, addr);
+                println!("key {}, address {:?}", key, addr);
             }
         }
     }
@@ -309,19 +301,9 @@ impl Node {
                 if let Some(data) = args["data"].as_str() {
                     self.data = serde_json::from_str(data).unwrap();
                 }
-                let amount = if self.previous.get_id() > self.addr.get_id() {
-                    MAX_NODE - self.previous.get_id() + (self.addr.get_id() - 1)
-                } else {
-                    self.addr.get_id() - self.previous.get_id()
-                };
-                self.previous.send_message(UpdateTable(
-                    self.addr.clone(),
-                    self.previous.get_id() + 1,
-                    amount,
-                ));
-                for (&a, _b) in self.association.iter() {
-                    addr_resp.send_message(GetResp(self.addr.clone(), a));
-                }
+                self.next = addr_resp;
+                self.previous
+                    .send_message(UpdateTable(self.addr.clone(), -1, -1));
             }
         }
     }
@@ -333,27 +315,7 @@ impl Node {
     fn handle_update_table(&mut self, args: Value) {
         self.mgt += 1;
         if let Some(addr) = get_addr_from_json(&args, "address") {
-            let id: i64 = addr.get_id();
-            let my_id: i64 = self.addr.get_id();
-
-            self.association = self
-                .association
-                .iter()
-                .map(|(&pointed_key, pointed_addr)| {
-                    let id: i64 = if id == 0 { MAX_NODE } else { id };
-                    return if id >= pointed_key
-                        && (pointed_addr.get_id() > id || pointed_addr.get_id() == my_id)
-                    {
-                        (pointed_key, addr.clone())
-                    } else {
-                        (pointed_key, pointed_addr.clone())
-                    };
-                })
-                .collect();
-
-            if self.addr != addr {
-                self.previous.send_message(UpdateTable(addr, -1, -1));
-            }
+            self.next = addr;
         }
     }
     fn is_between(id: i64, lower: i64, upper: i64) -> bool {
@@ -368,44 +330,13 @@ impl Node {
         let my_id: i64 = self.addr.get_id();
         return Node::is_between(id, previous_id, my_id);
     }
-    fn next_is_the_owner(&self, id: i64) -> Option<Address> {
-        let next_association: i64 = self.addr.get_id() + 1;
-        if let Some(a) = self.association.get(&next_association) {
-            if Node::is_between(id, self.addr.get_id(), a.get_id()) {
-                Some(a.clone())
-            } else {
-                None
-            }
-        } else {
-            None
-        }
-    }
-
-    fn is_mine_or_next(&self, id: i64) -> Option<Address> {
-        return if self.is_mine(id) {
-            Some(self.addr.clone())
-        } else {
-            self.next_is_the_owner(id)
-        };
-    }
 
     pub fn find_resp_in_table(&self, id: i64) -> Option<Address> {
         let id: i64 = id % MAX_NODE;
-        return if let Some(a) = self.is_mine_or_next(id) {
-            Some(a)
+        return if self.is_mine(id) {
+            Some(self.addr.clone())
         } else {
-            let mut nearest_resp: Vec<(i64, Address)> = self
-                .association
-                .clone()
-                .into_iter()
-                .filter(|couple| couple.1.get_id() < id)
-                .collect();
-            nearest_resp.sort_by(|a, b| a.0.cmp(&b.0));
-            if !nearest_resp.is_empty() {
-                Some(nearest_resp[0].1.clone())
-            } else {
-                None
-            }
+            Some(self.next.clone())
         };
     }
 }

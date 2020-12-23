@@ -30,7 +30,10 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="fix find nearest responsible" />
+    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="init commit">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chord/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/node.rs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -268,7 +271,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608728099003</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="init commit">
+      <created>1608728313873</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1608728313873</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -293,6 +303,7 @@
     <MESSAGE value="removed Cargo.lock file" />
     <MESSAGE value="Add explication in the README.md" />
     <MESSAGE value="fix find nearest responsible" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix find nearest responsible" />
+    <MESSAGE value="init commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="init commit" />
   </component>
 </project>
