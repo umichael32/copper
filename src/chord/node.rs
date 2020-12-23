@@ -309,16 +309,8 @@ impl Node {
                 if let Some(data) = args["data"].as_str() {
                     self.data = serde_json::from_str(data).unwrap();
                 }
-                let amount = if self.previous.get_id() > self.addr.get_id() {
-                    MAX_NODE - self.previous.get_id() + (self.addr.get_id() - 1)
-                } else {
-                    self.addr.get_id() - self.previous.get_id()
-                };
-                self.previous.send_message(UpdateTable(
-                    self.addr.clone(),
-                    self.previous.get_id() + 1,
-                    amount,
-                ));
+                self.previous
+                    .send_message(UpdateTable(self.addr.clone(), -1, -1));
                 for (&a, _b) in self.association.iter() {
                     addr_resp.send_message(GetResp(self.addr.clone(), a));
                 }
