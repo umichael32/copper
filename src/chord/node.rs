@@ -158,21 +158,24 @@ impl Node {
     fn handle_put(&mut self, args: Value) {
         self.put += 1;
         if let Some(addr) = get_addr_from_json(&args, "address") {
-            if let Some(id) = args["id"].as_i64() {
-                if let Some(key) = args["key"].as_i64() {
+            match (
+                args["id"].as_i64(),
+                args["key"].as_i64(),
+                args["value"].as_f64(),
+            ) {
+                (Some(id), Some(key), Some(v)) => {
                     if let Some(n) = self.find_resp_in_table(key) {
-                        if let Some(v) = args["value"].as_f64() {
-                            if self.addr.get_id() == n.get_id() {
-                                println!("PUT : I'm updating my data");
-                                self.data.insert(key, v);
-                                addr.send_message(Ack(id));
-                            } else {
-                                println!("PUT : Send the message to the next node");
-                                n.send_message(Put(addr, key, v, id));
-                            }
+                        if self.addr.get_id() == n.get_id() {
+                            println!("PUT : I'm updating my data");
+                            self.data.insert(key, v);
+                            addr.send_message(Ack(id));
+                        } else {
+                            println!("PUT : Send the message to the next node");
+                            n.send_message(Put(addr, key, v, id));
                         }
                     }
                 }
+                _ => {}
             }
         }
     }
@@ -378,11 +381,17 @@ impl Node {
         }
     }
 
-    pub fn find_resp_in_table(&self, id: i64) -> Option<Address> {
-        let id: i64 = id % MAX_NODE;
+    fn is_mine_or_next(&self, id: i64) -> Option<Address> {
         return if self.is_mine(id) {
             Some(self.addr.clone())
-        } else if let Some(a) = self.next_is_the_owner(id) {
+        } else {
+            self.next_is_the_owner(id)
+        };
+    }
+
+    pub fn find_resp_in_table(&self, id: i64) -> Option<Address> {
+        let id: i64 = id % MAX_NODE;
+        return if let Some(a) = self.is_mine_or_next(id) {
             Some(a)
         } else {
             let mut nearest_resp: Vec<(i64, Address)> = self
