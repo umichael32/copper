@@ -28,11 +28,23 @@
   </component>
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/src/app/client/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="fix find nearest responsible">
+    <list default="true" id="983b9ff3-86ef-4878-933d-3d0e09ce3cc2" name="Default Changelist" comment="Add explication in the README.md">
+      <change afterPath="$PROJECT_DIR$/src/app/client/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/client/parameter.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/server/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/client.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/rustochord.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/rustochord.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2020_07_41_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_04_11_2020_07_41__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/parameter.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/server/parameter.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chord/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/chord/node.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/server.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +64,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="v2" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -85,11 +97,16 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="org.rust.cargo.project.model.PROJECT_DISCOVERY" value="true" />
+    <property name="org.rust.disableDetachedFileInspection/home/michael/Documents/Cours/Master/Semestre-3/SD/copper/src/client.rs" value="true" />
     <property name="org.rust.disableDetachedFileInspection/home/michael/Documents/Cours/Master/Semestre_3/SD/copper/src/app/error.rs" value="true" />
     <property name="settings.editor.selected.configurable" value="application.passwordSafe" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/app/server" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/server/lib" />
+      <recent name="$PROJECT_DIR$/src/server/bin" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -99,9 +116,14 @@
       <command value="cargo clean" />
     </option>
   </component>
-  <component name="RunManager" selected="Cargo.Run copper">
-    <configuration name="Expand rustochord" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="expand --bin rustochord --color=always --theme=GitHub --tests" />
+  <component name="RunManager" selected="Cargo.Run client">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run client" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="run --package copper --bin client 127.0.0.1 9001 127.0.0.1 8001" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
       <option name="channel" value="DEFAULT" />
       <option name="allFeatures" value="false" />
@@ -111,14 +133,13 @@
       <option name="isRedirectInput" value="false" />
       <option name="redirectInputPath" value="" />
       <method v="2">
-        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Run copper" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
-      <option name="command" value="run --package copper --bin copper 127.0.0.1 1234" />
+    <configuration name="Run server (1)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" singleton="false">
+      <option name="command" value="run --package copper --bin server  127.0.0.1 8001 1" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
-      <option name="channel" value="DEFAULT" />
+      <option name="channel" value="STABLE" />
       <option name="allFeatures" value="false" />
       <option name="emulateTerminal" value="false" />
       <option name="backtrace" value="SHORT" />
@@ -127,6 +148,47 @@
       <option name="redirectInputPath" value="" />
       <method v="2">
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run server (2)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" singleton="false">
+      <option name="command" value="run --package copper --bin server 127.0.0.1 8002 4 127.0.0.1 8001" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <option name="channel" value="STABLE" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run server (3)" type="CargoCommandRunConfiguration" factoryName="Cargo Command" singleton="false">
+      <option name="command" value="run --package copper --bin server 127.0.0.1 8003 16 127.0.0.1 8002" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <option name="channel" value="STABLE" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Run server" type="CargoCommandRunConfiguration" factoryName="Cargo Command" temporary="true">
+      <option name="command" value="run --package copper --bin server" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$/src/app/client" />
+      <option name="channel" value="DEFAULT" />
+      <option name="allFeatures" value="false" />
+      <option name="emulateTerminal" value="false" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
@@ -160,24 +222,21 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <list>
-      <item itemvalue="Cargo.Expand rustochord" />
-      <item itemvalue="Cargo.Run copper" />
+      <item itemvalue="Cargo.Run server (2)" />
+      <item itemvalue="Cargo.Run server (3)" />
+      <item itemvalue="Cargo.Run server (1)" />
       <item itemvalue="Cargo.check" />
       <item itemvalue="Cargo.clean" />
+      <item itemvalue="Cargo.Run client" />
+      <item itemvalue="Cargo.Run server" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Cargo.Run client" />
+        <item itemvalue="Cargo.Run server" />
         <item itemvalue="Cargo.clean" />
         <item itemvalue="Cargo.check" />
-        <item itemvalue="Cargo.Run copper" />
-        <item itemvalue="Cargo.Expand rustochord" />
-        <item itemvalue="Cargo.clean" />
       </list>
     </recent_temporary>
   </component>
@@ -226,8 +285,7 @@
       <workItem from="1603354151639" duration="480000" />
       <workItem from="1603354649987" duration="143000" />
       <workItem from="1604472215834" duration="1140000" />
-      <workItem from="1608713305234" duration="838000" />
-      <workItem from="1608727437097" duration="418000" />
+      <workItem from="1609316644185" duration="8962000" />
     </task>
     <task id="LOCAL-00001" summary="update">
       <created>1602194397642</created>
@@ -257,21 +315,7 @@
       <option name="project" value="LOCAL" />
       <updated>1604472944399</updated>
     </task>
-    <task id="LOCAL-00005" summary="fix find nearest responsible">
-      <created>1608643275019</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1608643275019</updated>
-    </task>
-    <task id="LOCAL-00006" summary="clean to fit with v2 specification">
-      <created>1608734101596</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1608734101596</updated>
-    </task>
-    <option name="localTasksCounter" value="7" />
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -295,8 +339,6 @@
     <MESSAGE value="ignore .idea directory" />
     <MESSAGE value="removed Cargo.lock file" />
     <MESSAGE value="Add explication in the README.md" />
-    <MESSAGE value="fix find nearest responsible" />
-    <MESSAGE value="clean to fit with v2 specification" />
-    <option name="LAST_COMMIT_MESSAGE" value="clean to fit with v2 specification" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add explication in the README.md" />
   </component>
 </project>

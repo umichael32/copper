@@ -10,7 +10,7 @@ use std::net::{AddrParseError, Ipv4Addr, TcpListener, TcpStream};
 use std::thread::JoinHandle;
 
 const MAX_NODE: i64 = 32;
-const HALF_CIRCLE: i64 = MAX_NODE / 2;
+const HALF_CIRCLE: i64 = 16;
 
 #[derive(Debug)]
 pub struct Node {
@@ -18,7 +18,6 @@ pub struct Node {
     association: HashMap<i64, Address>,
     data: HashMap<i64, f64>,
     addr: Address,
-    ack_vector: Vec<i64>,
     put: i64,
     get: i64,
     mgt: i64,
@@ -79,7 +78,6 @@ impl Node {
             association: HashMap::new(),
             data: HashMap::new(),
             addr: addr.clone(),
-            ack_vector: Vec::new(),
             get: 0,
             put: 0,
             mgt: 0,
@@ -99,7 +97,7 @@ impl Node {
 
     fn handle_message(&mut self, stream: TcpStream) {
         if let Some(v) = read_parse(stream) {
-            if let Some(s) = v["cmf"].as_str() {
+            if let Some(s) = v["cmd"].as_str() {
                 let args = v["args"].to_owned();
                 match s {
                     "exit" => self.handle_exit(args),
@@ -127,14 +125,8 @@ impl Node {
         }
         self.exit = true;
     }
-    fn handle_ack(&mut self, args: Value) {
-        self.mgt += 1;
-        if let Some(id) = args["id"].as_i64() {
-            if let Some(index) = self.ack_vector.iter().position(|x| *x == id) {
-                println!("ack {} accepted", id);
-                self.ack_vector.remove(index);
-            }
-        }
+    fn handle_ack(&mut self, _args: Value) {
+        // Do nothing on a node
     }
     fn handle_answer(&self, args: Value) {
         if let Some(key) = args["key"].as_i64() {
@@ -158,24 +150,21 @@ impl Node {
     fn handle_put(&mut self, args: Value) {
         self.put += 1;
         if let Some(addr) = get_addr_from_json(&args, "address") {
-            match (
-                args["id"].as_i64(),
-                args["key"].as_i64(),
-                args["value"].as_f64(),
-            ) {
-                (Some(id), Some(key), Some(v)) => {
+            if let Some(id) = args["id"].as_i64() {
+                if let Some(key) = args["key"].as_i64() {
                     if let Some(n) = self.find_resp_in_table(key) {
-                        if self.addr.get_id() == n.get_id() {
-                            println!("PUT : I'm updating my data");
-                            self.data.insert(key, v);
-                            addr.send_message(Ack(id));
-                        } else {
-                            println!("PUT : Send the message to the next node");
-                            n.send_message(Put(addr, key, v, id));
+                        if let Some(v) = args["value"].as_f64() {
+                            if self.addr.get_id() == n.get_id() {
+                                println!("PUT : I'm updating my data");
+                                self.data.insert(key, v);
+                                addr.send_message(Ack(id));
+                            } else {
+                                println!("PUT : Send the message to the next node");
+                                n.send_message(Put(addr, key, v, id));
+                            }
                         }
                     }
                 }
-                _ => {}
             }
         }
     }
@@ -309,17 +298,10 @@ impl Node {
                 if let Some(data) = args["data"].as_str() {
                     self.data = serde_json::from_str(data).unwrap();
                 }
-                let amount: i64 = if self.previous.get_id() > self.addr.get_id() {
-                    MAX_NODE - self.previous.get_id() + (self.addr.get_id() - 1)
-                } else {
-                    self.addr.get_id() - self.previous.get_id()
-                };
-                // Send message to the first node which is higher than you plus one minus half_circle modulo circle_size
-                // or forward to the higher one in your table
                 self.previous.send_message(UpdateTable(
                     self.addr.clone(),
-                    (self.previous.get_id() + 1 - HALF_CIRCLE) % MAX_NODE,
-                    amount,
+                    (self.addr.get_id() - HALF_CIRCLE) % MAX_NODE,
+                    HALF_CIRCLE,
                 ));
                 for (&a, _b) in self.association.iter() {
                     addr_resp.send_message(GetResp(self.addr.clone(), a));
@@ -340,6 +322,7 @@ impl Node {
                     if self.addr.get_id() >= id_lk {
                         let id: i64 = addr.get_id();
                         let my_id: i64 = self.addr.get_id();
+                        println!("{:?}", args);
                         self.association = self
                             .association
                             .iter()
@@ -347,6 +330,8 @@ impl Node {
                                 let id: i64 = if id == 0 { MAX_NODE } else { id };
                                 return if id >= pointed_key
                                     && (pointed_addr.get_id() > id
+                                        || (pointed_addr.get_id() + MAX_NODE > id
+                                            && self.addr.get_id() > pointed_addr.get_id())
                                         || pointed_addr.get_id() == my_id)
                                 {
                                     (pointed_key, addr.clone())
@@ -390,17 +375,11 @@ impl Node {
         }
     }
 
-    fn is_mine_or_next(&self, id: i64) -> Option<Address> {
-        return if self.is_mine(id) {
-            Some(self.addr.clone())
-        } else {
-            self.next_is_the_owner(id)
-        };
-    }
-
     pub fn find_resp_in_table(&self, id: i64) -> Option<Address> {
         let id: i64 = id % MAX_NODE;
-        return if let Some(a) = self.is_mine_or_next(id) {
+        return if self.is_mine(id) {
+            Some(self.addr.clone())
+        } else if let Some(a) = self.next_is_the_owner(id) {
             Some(a)
         } else {
             let mut nearest_resp: Vec<(i64, Address)> = self

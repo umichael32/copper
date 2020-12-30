@@ -1,7 +1,6 @@
 mod app;
 mod chord;
-
-use app::parameter::{get_args, Param};
+use app::server::parameter::{get_args, Param};
 use chord::address::Address;
 use chord::message::Message::Hello;
 use chord::node::{listen, Node};
